@@ -1,0 +1,383 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS CloudFormation Sample Template EC2InstanceWithSecurityGroupSample:
+  Create an Amazon EC2 instance running the Amazon Linux AMI. The AMI is chosen based
+  on the region in which the stack is run. This example creates an EC2 security group
+  for the instance to give you SSH access. **WARNING** This template creates an Amazon
+  EC2 instance. You will be billed for the AWS resources used if you create a stack
+  from this template.'
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t2.small
+    AllowedValues:
+    - t2.nano
+    - t2.micro
+    - t2.small
+    - t2.medium
+    - t2.large
+    - t2.xlarge
+    - t2.2xlarge
+    ConstraintDescription: must be a valid EC2 instance type.
+  SSHLocation:
+    Description: The IP address range that can be used to SSH to the EC2 instances
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+Mappings:
+  AWSInstanceType2Arch:
+    t2.nano:
+      Arch: HVM64
+    t2.micro:
+      Arch: HVM64
+    t2.small:
+      Arch: HVM64
+    t2.medium:
+      Arch: HVM64
+    t2.large:
+      Arch: HVM64
+    t2.xlarge:
+      Arch: HVM64
+    t2.2xlarge:
+      Arch: HVM64
+  AWSInstanceType2NATArch:
+    t2.nano:
+      Arch: NATHVM64
+    t2.micro:
+      Arch: NATHVM64
+    t2.small:
+      Arch: NATHVM64
+    t2.medium:
+      Arch: NATHVM64
+    t2.large:
+      Arch: NATHVM64
+    t2.xlarge:
+      Arch: NATHVM64
+    t2.2xlarge:
+      Arch: NATHVM64
+  AWSRegionArch2AMI:
+    ap-east-1:
+      HVM64: ami-f85b1989
+      HVMG2: NOT_SUPPORTED
+    ap-northeast-1:
+      HVM64: ami-0b2c2a754d5b4da22
+      HVMG2: ami-09d0e0e099ecabba2
+    ap-northeast-2:
+      HVM64: ami-0493ab99920f410fc
+      HVMG2: NOT_SUPPORTED
+    ap-northeast-3:
+      HVM64: ami-01344f6f63a4decc1
+      HVMG2: NOT_SUPPORTED
+    ap-south-1:
+      HVM64: ami-03cfb5e1fb4fac428
+      HVMG2: ami-0244c1d42815af84a
+    ap-southeast-1:
+      HVM64: ami-0ba35dc9caf73d1c7
+      HVMG2: ami-0e46ce0d6a87dc979
+    ap-southeast-2:
+      HVM64: ami-0ae99b503e8694028
+      HVMG2: ami-0c0ab057a101d8ff2
+    us-east-1:
+      HVM64: ami-0f82752aa17ff8f5d # Ubuntu Server 16.04 LTS must use this
+      HVMG2: ami-0aeb704d503081ea6
+    us-east-2:
+      HVM64: ami-027cab9a7bf0155df
+      HVMG2: NOT_SUPPORTED
+    us-west-1:
+      HVM64: ami-088c153f74339f34c
+      HVMG2: ami-0a7fc72dc0e51aa77
+    us-west-2:
+      HVM64: ami-01fee56b22f308154
+      HVMG2: ami-0fe84a5b4563d8f27
+Resources:
+  WebAppInstance:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - WebAppPermissions
+      - PublicSubnet1
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - PrivateIpAddress: '172.31.14.4'
+        SubnetId: !Ref PublicSubnet1
+        DeviceIndex: '0'
+        GroupSet:
+        - !Ref WebAppPermissions
+        AssociatePublicIpAddress: true
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -xe
+            - |
+              git clone https://github.com/zackteo/dbfrontend-clone.git
+            - |
+              cd dbfrontend-clone
+            - |
+              sudo apt-get update
+            - |
+              sudo apt-get install npm -y
+            - |
+              npm install
+            - |
+              sudo apt-get install leiningen -y"
+            - |
+              lein do clean, cljsbuild once min
+            - |
+              #fix above, deployment stuffs
+            - |+
+  MySqlInstance:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - MySqlPermissions
+      - PublicSubnet1
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - PrivateIpAddress: '172.31.14.5'
+        SubnetId: !Ref PublicSubnet1
+        DeviceIndex: '0'
+        GroupSet:
+        - !Ref MySqlPermissions
+        AssociatePublicIpAddress: true
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -xe
+            - |
+              sudo apt-get update
+            - |
+              sudo apt-get -y install mysql-server
+            - |
+              mkdir data && cd data
+            - |
+              sudo wget https://istd50043.s3-ap-southeast-1.amazonaws.com/kindle-reviews.zip
+            - |
+              sudo apt-get install -y unzip
+            - |
+              unzip kindle-reviews.zip
+            - |
+              rm -rf kindle_reviews.json
+            - |
+              sudo mysql -e "create database dbds"
+            - |
+              sudo mysql -e "' + 'GRANT ALL PRIVILEGES ON *.* TO' + "'ubuntu'" + 'IDENTIFIED BY' + "'password';" + '"
+            - |
+              cd data && mysql -u ubuntu -ppassword -D dbds -e "source kindle_reviews.sql
+            - |
+              sudo sed -ir 's/127.0.0.1/0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
+            - |
+              sudo service mysql restart
+            - |+
+  MongoInstance:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - MongoPermissions
+      - PublicSubnet1
+    Properties:
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      NetworkInterfaces:
+      - PrivateIpAddress: '172.31.14.6'
+        SubnetId: !Ref PublicSubnet1
+        DeviceIndex: '0'
+        GroupSet:
+        - !Ref MongoPermissions
+        AssociatePublicIpAddress: true
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -xe
+            - |
+              sudo apt-get install gnupg
+            - |
+              wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
+            - |
+              echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+            - |
+              sudo apt-get update
+            - |
+              sudo apt-get install -y mongodb-org
+            - |
+              sudo service mongod start
+            - |
+              wget https://istd50043.s3-ap-southeast-1.amazonaws.com/meta_kindle_store.zip
+            - |
+              sudo apt-get install -y unzip
+            - |
+              unzip meta_kindle_store.zip
+            - |
+              mongorestore --db metastore meta_Kindle_Store.json
+            - |
+              #Change db name above
+            - |
+              sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
+            - |
+              sudo service mongod restart
+            - |+
+  PublicSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 172.31.14.0/24
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPCloud
+    DependsOn:
+      - VPCloud
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPCloud
+      InternetGatewayId: !Ref InternetGateway
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+  VPCloud:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 172.31.14.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPCloud
+  InternetRoute:
+    Type: AWS::EC2::Route
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref RouteTable
+  SubnetARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref PublicSubnet1
+  WebAppPermissions:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Web Application permissions
+      VpcId: !Ref VPCloud
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp:
+          Ref: SSHLocation
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
+        CidrIp: '0.0.0.0/0'
+  MySqlPermissions:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: MySQL permissions
+      VpcId: !Ref VPCloud
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp:
+          Ref: SSHLocation
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
+        CidrIp: '0.0.0.0/0'
+      - IpProtocol: tcp
+        FromPort: '3306'
+        ToPort: '3306'
+        CidrIp: '0.0.0.0/0'
+  MongoPermissions:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: MongoDB permissions
+      VpcId: !Ref VPCloud
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp:
+          Ref: SSHLocation
+      - IpProtocol: tcp
+        FromPort: '27017'
+        ToPort: '27017'
+        CidrIp: '0.0.0.0/0'
+      SecurityGroupEgress:
+      - IpProtocol: -1
+        CidrIp: '0.0.0.0/0'
+Outputs:
+  InstanceId:
+    Description: InstanceId of the newly created EC2 instance
+    Value:
+      Ref: WebAppInstance
+  AZ:
+    Description: Availability Zone of the newly created EC2 instance
+    Value:
+      Fn::GetAtt:
+      - WebAppInstance
+      - AvailabilityZone
+  WebAppDNS:
+    Description: Public DNSName of the Web App EC2 instance
+    Value:
+      Fn::GetAtt:
+      - WebAppInstance
+      - PublicDnsName
+  PublicIP:
+    Description: Public IP address of the newly created EC2 instance
+    Value:
+      Fn::GetAtt:
+      - WebAppInstance
+      - PublicIp
+  MySqlDNS2:
+    Description: Public DNSName of MySQL EC2 instance
+    Value:
+      Fn::GetAtt:
+      - MySqlInstance
+      - PublicDnsName
+  MongoDNS3:
+    Description: Public DNSName of MondoDB EC2 instance
+    Value:
+      Fn::GetAtt:
+      - MongoInstance
+      - PublicDnsName
