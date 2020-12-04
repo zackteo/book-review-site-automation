@@ -74,33 +74,33 @@ for x in range(1, n + 1 - 2):
 
 # append outputs to be shown CloudFormation Interface
 outputs = """Outputs:
-  InstanceId:
-    Description: InstanceId of the newly created EC2 instance
-    Value:
-      Ref: EC2Instance1
-  AZ:
-    Description: Availability Zone of the newly created EC2 instance
-    Value:
-      Fn::GetAtt:
-      - EC2Instance1
-      - AvailabilityZone
-  PublicIP:
-    Description: Public IP address of the newly created EC2 instance
-    Value:
-      Fn::GetAtt:
-      - EC2Instance1
-      - PublicIp
+#  InstanceId:
+#    Description: InstanceId of the newly created EC2 instance
+#    Value:
+#      Ref: EC2Instance1
+#  AZ:
+#    Description: Availability Zone of the newly created EC2 instance
+#    Value:
+#      Fn::GetAtt:
+#      - EC2Instance1
+#      - AvailabilityZone
 """
 
 append(outputs, "hdfs-spark-ec2-cluster-new.yml")
 
 
-dns_output = """  Instance<<number>>PublicDNS:
-    Description: Public DNSName of the newly created EC2 instance
+dns_output = """#  Instance<<number>>PublicDNS:
+#    Description: Public DNSName of the newly created EC2 instance
+#    Value:
+#      Fn::GetAtt:
+#      - EC2Instance<<number>>
+#      - PublicDnsName
+  Instance<<number>>PublicIP:
+    Description: Public IP address of the newly created EC2 instance
     Value:
       Fn::GetAtt:
       - EC2Instance<<number>>
-      - PublicDnsName
+      - PublicIp
 """
 
 # output DNS for each instance in the cluster

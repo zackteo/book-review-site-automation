@@ -30,4 +30,4 @@ aws ec2 create-key-pair --key-name $aws_key_pair > ~/.ssh/$aws_key_pair.pem
 
 #REVIEW: t2.micro
 aws cloudformation create-stack --template-body file://$(pwd)/cloudformation_templates/production-setup.yml  \
-    --stack-name single-instance --parameters ParameterKey=KeyName,ParameterValue=$aws_key_pair ParameterKey=InstanceType,ParameterValue=t2.micro
+    --stack-name production-system --parameters ParameterKey=KeyName,ParameterValue=$aws_key_pair ParameterKey=InstanceType,ParameterValue=t2.micro
