@@ -6,13 +6,14 @@ import os
 
 n = int(sys.argv[1])  # var1
 ssh_key = sys.argv[2]
+file_path = sys.argv[3]
 
 if n < 2:
     print("Error: Number of Instances must be 2 or more")
     exit(1)
 
 
-with open("test.json") as f:
+with open(file_path) as f:
     data = json.load(f)
 
 outputs = dict()
@@ -24,13 +25,7 @@ dns = outputs["Instance1PublicIP"]
 
 # send aws-key to namenode
 os.system(
-    "scp -i ~/.ssh/"
-    + ssh_key
-    + "~/.ssh/"
-    + ssh_key
-    + "ubuntu@"
-    + dns
-    + ":requirements.txt/.ssh/id_rsa"
+    "scp -i ~/.ssh/" + ssh_key + "~/.ssh/" + ssh_key + "ubuntu@" + dns + "/.ssh/id_rsa"
 )
 
 # create /etc/hosts for all

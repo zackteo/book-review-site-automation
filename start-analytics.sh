@@ -34,11 +34,11 @@ sudo apt-get install -y python3
 
 #Programmaticatically edit yml
 cd python_scripts
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-python yml_append.py $no_of_instances
+python3 -m pip install --upgrade pip
+pip3 install -r requirements.txt
+python3 yml_append.py $no_of_instances
 
 
 #REVIEW: t2.micro
@@ -48,3 +48,5 @@ aws cloudformation create-stack --template-body file://$(pwd)/hdfs-spark-ec2-clu
 sleep 1m
 
 aws cloudformation describe-stacks --stack-name analytics-system > test.json
+
+python3 $no_of_instances $aws_key_pair test.json
