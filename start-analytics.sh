@@ -5,6 +5,7 @@ read -p "aws_access_key_id : " aws_access_key_id
 read -p "aws_secret_access_key : " aws_secret_access_key
 read -p "aws_session_token (AWS Educate) : " aws_session_token
 read -p "new key-pair name (not pre-existing) : " aws_key_pair
+read -p "number of EC2 instances for spark cluster (min 2) : " no_of_instances
 
 #cd ~
 mkdir .aws
@@ -28,6 +29,19 @@ sudo ./aws/install
 #create key
 aws ec2 create-key-pair --key-name $aws_key_pair > ~/.ssh/$aws_key_pair.pem
 
+#install python stuff
+sudo apt-get install -y python3
+
+#Programmaticatically edit yml
+cd append_yml 
+#python -m venv .venv
+#source .venv/bin/activate
+#python -m pip install --upgrade pip
+#pip3 install -r requirements.txt
+python yml_append.py $no_of_instances
+
+
 #REVIEW: t2.micro
-aws cloudformation create-stack --template-body file://$(pwd)/cloudformation_templates/production-setup.yml  \
+aws cloudformation create-stack --template-body file://$(pwd)/hdfs-spark-ec2-cluster-new.yml   \
     --stack-name single-instance --parameters ParameterKey=KeyName,ParameterValue=$aws_key_pair ParameterKey=InstanceType,ParameterValue=t2.micro
+

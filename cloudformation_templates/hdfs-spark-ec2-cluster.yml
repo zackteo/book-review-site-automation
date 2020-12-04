@@ -98,6 +98,57 @@ Mappings:
       HVM64: ami-01fee56b22f308154
       HVMG2: ami-0fe84a5b4563d8f27
 Resources:
+  PublicSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 172.31.23.0/24
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPCloud
+    DependsOn:
+      - VPCloud
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPCloud
+      InternetGatewayId: !Ref InternetGateway
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+  VPCloud:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 172.31.23.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      VpcId: !Ref VPCloud
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp:
+          Ref: SSHLocation
+      SecurityGroupEgress:
+      - IpProtocol: -1
+        CidrIp: 0.0.0.0/0
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPCloud
+  InternetRoute:
+    Type: AWS::EC2::Route
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref RouteTable
+  SubnetARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref PublicSubnet1
   EC2Instance1:
     Type: AWS::EC2::Instance
     DependsOn:
@@ -106,8 +157,6 @@ Resources:
     Properties:
       InstanceType:
         Ref: InstanceType
-#      SecurityGroups:
-#      - Ref: InstanceSecurityGroup
       KeyName:
         Ref: KeyName
       ImageId:
@@ -165,15 +214,6 @@ Resources:
         DeviceIndex: '0'
         GroupSet:
         - !Ref InstanceSecurityGroup
-        #AssociatePublicIpAddress: true
-#      NetworkInterfaces:
-#      # PrivateIpAddress: '172.31.23.5'
-#       #SubnetId: !Ref PublicSubnet1
-#      - DeviceIndex: '1'
-#        NetworkInterfaceId: !Ref EC2Instance1
-#        GroupSet:
-#        - !Ref InstanceSecurityGroup
-#        #AssociatePublicIpAddress: true
       UserData: !Base64
         'Fn::Join':
           - ''
@@ -190,177 +230,3 @@ Resources:
             - |
               #./setup.sh
             - |+
-  EC2Instance3:
-    Type: AWS::EC2::Instance
-    DependsOn:
-      - InstanceSecurityGroup
-      - PublicSubnet1
-    Properties:
-      InstanceType:
-        Ref: InstanceType
-      KeyName:
-        Ref: KeyName
-      ImageId:
-        Fn::FindInMap:
-        - AWSRegionArch2AMI
-        - Ref: AWS::Region
-        - Fn::FindInMap:
-          - AWSInstanceType2Arch
-          - Ref: InstanceType
-          - Arch
-      NetworkInterfaces:
-      - PrivateIpAddress: '172.31.23.6'
-        SubnetId: !Ref PublicSubnet1
-        DeviceIndex: '0'
-        GroupSet:
-        - !Ref InstanceSecurityGroup
-        #AssociatePublicIpAddress: true
-      UserData: !Base64
-        'Fn::Join':
-          - ''
-          - - |
-              #!/bin/bash -xe
-            - |
-              cd /home/ubuntu/
-            - |
-              mkdir setup && cd setup
-            - |
-              curl https://gist.githubusercontent.com/zackteo/0924304ec7616a92689dc90dcceabb25/raw/5e42aae45ba2c48a0fe6a235132c56734e9a481a/datanode.sh > setup.sh
-            - |
-              chmod +x setup.sh
-            - |
-              ./setup.sh
-            - |+
-  EC2Instance4:
-    Type: AWS::EC2::Instance
-    DependsOn:
-      - InstanceSecurityGroup
-      - PublicSubnet1
-    Properties:
-      InstanceType:
-        Ref: InstanceType
-      KeyName:
-        Ref: KeyName
-      ImageId:
-        Fn::FindInMap:
-        - AWSRegionArch2AMI
-        - Ref: AWS::Region
-        - Fn::FindInMap:
-          - AWSInstanceType2Arch
-          - Ref: InstanceType
-          - Arch
-      NetworkInterfaces:
-      - PrivateIpAddress: '172.31.23.7'
-        SubnetId: !Ref PublicSubnet1
-        DeviceIndex: '0'
-        GroupSet:
-        - !Ref InstanceSecurityGroup
-        #AssociatePublicIpAddress: true
-      UserData: !Base64
-        'Fn::Join':
-          - ''
-          - - |
-              #!/bin/bash -xe
-            - |
-              cd /home/ubuntu/
-            - |
-              mkdir setup && cd setup
-            - |
-              curl https://gist.githubusercontent.com/zackteo/0924304ec7616a92689dc90dcceabb25/raw/5e42aae45ba2c48a0fe6a235132c56734e9a481a/datanode.sh > setup.sh
-            - |
-              chmod +x setup.sh
-            - |
-              ./setup.sh
-            - |+
-  PublicSubnet1:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      CidrBlock: 172.31.23.0/24
-      MapPublicIpOnLaunch: true
-      VpcId: !Ref VPCloud
-    DependsOn:
-      - VPCloud
-  VPCGatewayAttachment:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      VpcId: !Ref VPCloud
-      InternetGatewayId: !Ref InternetGateway
-  InternetGateway:
-    Type: 'AWS::EC2::InternetGateway'
-  VPCloud:
-    Type: 'AWS::EC2::VPC'
-    Properties:
-      CidrBlock: 172.31.23.0/16
-      EnableDnsHostnames: true
-      EnableDnsSupport: true
-  InstanceSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Enable SSH access via port 22
-      VpcId: !Ref VPCloud
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: '22'
-        ToPort: '22'
-        CidrIp:
-          Ref: SSHLocation
-      SecurityGroupEgress:
-      - IpProtocol: -1
-        CidrIp: 0.0.0.0/0
-  RouteTable:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref VPCloud
-  InternetRoute:
-    Type: AWS::EC2::Route
-    DependsOn: VPCGatewayAttachment
-    Properties:
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref InternetGateway
-      RouteTableId: !Ref RouteTable
-  SubnetARouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref RouteTable
-      SubnetId: !Ref PublicSubnet1
-Outputs:
-  InstanceId:
-    Description: InstanceId of the newly created EC2 instance
-    Value:
-      Ref: EC2Instance1
-  AZ:
-    Description: Availability Zone of the newly created EC2 instance
-    Value:
-      Fn::GetAtt:
-      - EC2Instance1
-      - AvailabilityZone
-  PublicDNS:
-    Description: Public DNSName of the newly created EC2 instance
-    Value:
-      Fn::GetAtt:
-      - EC2Instance1
-      - PublicDnsName
-  PublicIP:
-    Description: Public IP address of the newly created EC2 instance
-    Value:
-      Fn::GetAtt:
-      - EC2Instance1
-      - PublicIp
-  PublicDNS2:
-    Description: Public DNSName of the newly created EC2 instance
-    Value:
-      Fn::GetAtt:
-      - EC2Instance2
-      - PublicDnsName
-  PublicDNS3:
-    Description: Public DNSName of the newly created EC2 instance
-    Value:
-      Fn::GetAtt:
-      - EC2Instance3
-      - PublicDnsName
-  PublicDNS4:
-    Description: Public DNSName of the newly created EC2 instance
-    Value:
-      Fn::GetAtt:
-      - EC2Instance4
-      - PublicDnsName
