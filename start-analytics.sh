@@ -8,7 +8,7 @@ read -p "new key-pair name (not pre-existing) : " aws_key_pair
 read -p "number of EC2 instances for spark cluster (min 2) : " no_of_instances
 
 #cd ~
-mkdir .aws
+mkdir ~/.aws
 echo "[default]
 region = us-east-1" > ~/.aws/config
 

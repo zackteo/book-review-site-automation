@@ -7,14 +7,14 @@ read -p "aws_session_token (AWS Educate) : " aws_session_token
 read -p "new key-pair name (not pre-existing) : " aws_key_pair
 
 #cd ~
-mkdir .aws
+mkdir ~/.aws
 echo "[default]
-region = us-east-1" > .aws/config
+region = us-east-1" > ~/.aws/config
 
 echo "[default]
 aws_access_key_id=$aws_access_key_id
 aws_secret_access_key=$aws_secret_access_key
-aws_session_token=$aws_session_token" > .aws/credentials
+aws_session_token=$aws_session_token" > ~/.aws/credentials
 
 #FOR PROF start with ami-0f82752aa17ff8f5d
 sudo apt-get update
