@@ -50,7 +50,7 @@ python3 yml_append.py $no_of_instances
 
 #REVIEW: t2.micro
 aws cloudformation create-stack --template-body file://$(pwd)/hdfs-spark-ec2-cluster-new.yml   \
-    --stack-name analytics-system --parameters ParameterKey=KeyName,ParameterValue=$aws_key_pair ParameterKey=InstanceType,ParameterValue=t2.micro
+    --stack-name analytics-system --parameters ParameterKey=KeyName,ParameterValue=$aws_key_pair ParameterKey=InstanceType,ParameterValue=t2.large
 
 sleep 2m
 
