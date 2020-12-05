@@ -26,7 +26,13 @@ unzip awscliv2.zip
 sudo ./aws/install
 
 #create key
-aws ec2 create-key-pair --key-name $aws_key_pair > ~/.ssh/$aws_key_pair.pem
+aws ec2 create-key-pair --key-name $aws_key_pair > ~/.ssh/$aws_key_pair.json
+
+sudo apt-get -y install jq
+
+echo -e $(jq -r .KeyMaterial ~/.ssh/$aws_key_pair.json) > $aws_key_pair.pem
+
+chmod 600 ~/.ssh/$aws_key_pair.pem
 
 #REVIEW: t2.micro
 aws cloudformation create-stack --template-body file://$(pwd)/cloudformation_templates/production-setup.yml  \

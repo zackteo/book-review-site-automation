@@ -54,6 +54,6 @@ aws cloudformation create-stack --template-body file://$(pwd)/hdfs-spark-ec2-clu
 
 sleep 2m
 
-aws cloudformation describe-stacks --stack-name analytics-system > test.json
+aws cloudformation describe-stacks --stack-name analytics-system > ~/test.json
 
-python3 python_scripts/parse-json.py $no_of_instances $aws_key_pair.pem test.json
+python3 ~/book-review-site-automation/python_scripts/parse-json.py $no_of_instances $aws_key_pair.pem ~/test.json

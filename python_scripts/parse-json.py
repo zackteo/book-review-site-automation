@@ -5,7 +5,7 @@ import sys
 import os
 
 n = int(sys.argv[1])  # var1
-ssh_key = sys.argv[2]
+ssh_key = sys.argv[2] + ".pem"
 file_path = sys.argv[3]
 
 if n < 2:
