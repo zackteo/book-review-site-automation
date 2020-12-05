@@ -116,7 +116,7 @@ for ip in outputs.values():
         "scp -i ~/.ssh/"
         + ssh_key
         + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-        + " home/ubuntu/setup.sh"
+        + " /home/ubuntu/setup.sh"
         + " ubuntu@"
         + ip
         + ":/home/ubuntu/setup.sh"
