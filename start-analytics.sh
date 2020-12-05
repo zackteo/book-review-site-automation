@@ -10,12 +10,12 @@ read -p "number of EC2 instances for spark cluster (min 2) : " no_of_instances
 #cd ~
 mkdir .aws
 echo "[default]
-region = us-east-1" > .aws/config
+region = us-east-1" > ~/.aws/config
 
 echo "[default]
 aws_access_key_id=$aws_access_key_id
 aws_secret_access_key=$aws_secret_access_key
-aws_session_token=$aws_session_token" > .aws/credentials
+aws_session_token=$aws_session_token" > ~/.aws/credentials
 
 #FOR PROF start with ami-0f82752aa17ff8f5d
 sudo apt-get update
@@ -31,6 +31,7 @@ aws ec2 create-key-pair --key-name $aws_key_pair > ~/.ssh/$aws_key_pair.pem
 
 #install python stuff
 sudo apt-get install -y python3
+sudo apt-get install -y python3-venv
 
 #Programmaticatically edit yml
 cd python_scripts
