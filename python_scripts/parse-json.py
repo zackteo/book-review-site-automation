@@ -57,20 +57,14 @@ os.system(
     + ":/home/ubuntu/setup.sh"
 )
 
-# run scripts
-for ip in outputs.keys():
-    os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + "chmod +x setup.sh")
-    os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + "./setup.sh &")
-
-
 # create /etc/hosts for all
 
 host_file = """
 # /etc/hosts
-172.31.23.4 hadoop-master
-172.31.23.5 hadoop-worker-1
-172.31.23.6 hadoop-worker-2
-172.31.23.7 hadoop-worker-3
+172.31.23.4 hadoop-node-1
+172.31.23.5 hadoop-node-2
+172.31.23.6 hadoop-node-3
+172.31.23.7 hadoop-node-4
 # The following lines are desirable for IPv6 capable hosts
 ::1
 ip6-localhost ip6-loopback
@@ -79,3 +73,28 @@ ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 """
+
+for ip in outputs.keys():
+    os.system("sudo echo '# /etc/hosts >> /etc/hosts'")
+    for i in range(n):
+        os.system(
+            "sudo echo 172.31.23."
+            + (i + 4)
+            + " hadoop-node-"
+            + (i + 1)
+            + " >> /etc/hosts"
+        )
+    os.system(
+        "sudo echo '# The following lines are desirable for IPv6 capable hosts >> /etc/hosts'"
+    )
+    os.system("sudo echo ::1 >> /etc/hosts")
+    os.system("sudo echo ip6-localhost ip6-loopback >> /etc/hosts")
+    os.system("sudo echo fe00::0 ip6-localnet >> /etc/hosts")
+    os.system("sudo echo ff00::0 ip6-mcastprefix >> /etc/hosts")
+    os.system("sudo echo ff02::1 ip6-allnodes >> /etc/hosts")
+    os.system("sudo echo ff02::2 ip6-allrouters >> /etc/hosts")
+
+# run scripts
+for ip in outputs.keys():
+    os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + "chmod +x setup.sh")
+    os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + "./setup.sh > log.txt &")

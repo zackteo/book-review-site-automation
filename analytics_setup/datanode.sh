@@ -6,35 +6,18 @@ sudo apt-get install -y openjdk-8-jdk-headless #non-GUI version
 
 echo checkpoint1
 
-#Setup hostname
-sudo dd of=/etc/hosts << EOF
-# /etc/hosts
-172.31.23.4 hadoop-master
-172.31.23.5 hadoop-worker-1
-172.31.23.6 hadoop-worker-2
-172.31.23.7 hadoop-worker-3
-# The following lines are desirable for IPv6 capable hosts
-::1
-ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-EOF
-
-echo checkpoint2
-
 #Allow hadoop user sudo rights w/o password
 sudo sh -c 'echo "hadoop ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-hadoop'
 #Reduce rate of writing to swap files
 sudo sysctl vm.swappiness=10
 
-echo checkpoint3
+echo checkpoint2
+
 #Allow password based SSH
 sudo sed -i "s/^PasswordAuthentication.*/PasswordAuthentication yes/" /etc/ssh/sshd_config
 sudo service sshd restart
 
-echo checkpoint4
+echo checkpoint3
 
 #cd ~
 #sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
@@ -48,6 +31,8 @@ do
   echo "test"
 done
 ls -l /hadoop-3.3.0.tgz
+
+echo checkpoint4
 
 tar zxvf hadoop-3.3.0.tgz
 sudo mv hadoop-3.3.0 /opt/

@@ -7,24 +7,6 @@ sudo apt-get install -y ssh
 
 echo checkpoint1
 
-#Setup hostname
-sudo dd of=/etc/hosts << EOF
-# /etc/hosts
-172.31.23.4 hadoop-master
-172.31.23.5 hadoop-worker-1
-172.31.23.6 hadoop-worker-2
-172.31.23.7 hadoop-worker-3
-# The following lines are desirable for IPv6 capable hosts
-::1
-ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-EOF
-
-echo checkpoint2
-
 #Allow hadoop user sudo rights w/o password
 sudo sh -c 'echo "hadoop ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-hadoop'
 #Reduce rate of writing to swap files
@@ -42,14 +24,14 @@ sudo service sshd restart
 #ssh-copy-id hadoop-worker-2
 #ssh-copy-id hadoop-worker-3
 
-echo checkpoint3
+echo checkpoint2
 
 #Change user to hadoop
 cd ~
 sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
 sudo su hadoop
 
-echo checkpoint4
+echo checkpoint3
 
 #Hadoop Set-up
 sudo mkdir download && cd download
@@ -62,8 +44,8 @@ echo checkpoint4
 # update the JAVA_HOME
 export JH="\/usr\/lib\/jvm\/java-8-openjdk-amd64"
 sed -i "s/# export JAVA_HOME=.*/export\ JAVA_HOME=${JH}/g" hadoop-3.3.0/etc/hadoop/hadoop-env.sh
-MASTER="hadoop-master"
-WORKERS="hadoop-worker-1 hadoop-worker-2 hadoop-worker-3"  
+MASTER="hadoop-node-1"
+WORKERS="hadoop-node-2 hadoop-node-3 hadoop-node-4 hadoop-node-5 hadoop-node-6 hadoop-node-7 hadoop-node-8 hadoop-node-9 hadoop-node-10"  
 
 echo -e "<?xml version=\"1.0\"?>
 <?xml-stylesheet type=\"text/xsl\" href=\"configuration.xsl\"?>
