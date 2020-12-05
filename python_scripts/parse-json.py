@@ -105,5 +105,17 @@ for ip in outputs.values():
 
 # run scripts
 for ip in outputs.values():
-    os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + " chmod +x setup.sh")
-    os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + " ./setup.sh > log.txt &")
+    os.system(
+        "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@"
+        + ip
+        + " -i ~/.ssh/"
+        + ssh_key
+        + " chmod +x setup.sh"
+    )
+    os.system(
+        "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@"
+        + ip
+        + " -i ~/.ssh/"
+        + ssh_key
+        + " ./setup.sh > log.txt &"
+    )
