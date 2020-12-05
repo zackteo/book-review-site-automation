@@ -36,7 +36,7 @@ os.system(
 )
 
 # send scripts to nodes
-for ip in outputs.keys():
+for ip in outputs.values():
     os.system(
         "scp -i ~/.ssh/"
         + ssh_key
@@ -74,14 +74,14 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 """
 
-for ip in outputs.keys():
+for ip in outputs.values():
     os.system("sudo echo '# /etc/hosts >> /etc/hosts'")
     for i in range(n):
         os.system(
             "sudo echo 172.31.23."
-            + (i + 4)
+            + str(i + 4)
             + " hadoop-node-"
-            + (i + 1)
+            + str(i + 1)
             + " >> /etc/hosts"
         )
     os.system(
