@@ -35,7 +35,7 @@ command = (
     + ssh_key
     + " ubuntu@"
     + dns
-    + ":/.ssh/id_rsa"
+    + ":home/ubuntu/.ssh/id_rsa"
 )
 
 print(command)
@@ -48,7 +48,7 @@ os.system(
     + ssh_key
     + " ubuntu@"
     + dns
-    + ":/.ssh/id_rsa"
+    + ":/home/ubuntu/.ssh/id_rsa"
 )
 
 # create /etc/hosts for all

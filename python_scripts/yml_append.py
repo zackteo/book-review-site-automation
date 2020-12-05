@@ -53,15 +53,15 @@ stuff = """  EC2Instance<<number+2>>:
           - - |
               #!/bin/bash -xe
             - |
-              cd /home/ubuntu/
+              #cd /home/ubuntu/
             - |
-              mkdir setup && cd setup
+              #mkdir setup && cd setup
             - |
-              curl https://gist.githubusercontent.com/zackteo/0924304ec7616a92689dc90dcceabb25/raw/5e42aae45ba2c48a0fe6a235132c56734e9a481a/datanode.sh > setup.sh
+              #curl https://gist.githubusercontent.com/zackteo/0924304ec7616a92689dc90dcceabb25/raw/5e42aae45ba2c48a0fe6a235132c56734e9a481a/datanode.sh > setup.sh
             - |
-              chmod +x setup.sh
+              #chmod +x setup.sh
             - |
-              ./setup.sh
+              #./setup.sh
             - |+
 """
 
