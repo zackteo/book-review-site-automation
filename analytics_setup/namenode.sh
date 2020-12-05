@@ -5,6 +5,8 @@ sudo apt-get update #&& sudo apt-get upgrade -y
 sudo apt-get install -y openjdk-8-jdk-headless
 sudo apt-get install -y ssh
 
+echo checkpoint1
+
 #Setup hostname
 sudo dd of=/etc/hosts << EOF
 # /etc/hosts
@@ -21,6 +23,7 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 EOF
 
+echo checkpoint2
 
 #Allow hadoop user sudo rights w/o password
 sudo sh -c 'echo "hadoop ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-hadoop'
@@ -39,23 +42,28 @@ sudo service sshd restart
 #ssh-copy-id hadoop-worker-2
 #ssh-copy-id hadoop-worker-3
 
+echo checkpoint3
+
 #Change user to hadoop
 cd ~
 sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
 sudo su hadoop
+
+echo checkpoint4
 
 #Hadoop Set-up
 sudo mkdir download && cd download
 sudo wget https://apachemirror.sg.wuchna.com/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz
 
 sudo tar zxvf hadoop-3.3.0.tar.gz
+
+echo checkpoint4
+
 # update the JAVA_HOME
 export JH="\/usr\/lib\/jvm\/java-8-openjdk-amd64"
 sed -i "s/# export JAVA_HOME=.*/export\ JAVA_HOME=${JH}/g" hadoop-3.3.0/etc/hadoop/hadoop-env.sh
 MASTER="hadoop-master"
 WORKERS="hadoop-worker-1 hadoop-worker-2 hadoop-worker-3"  
-
-
 
 echo -e "<?xml version=\"1.0\"?>
 <?xml-stylesheet type=\"text/xsl\" href=\"configuration.xsl\"?>
@@ -144,6 +152,8 @@ echo -e "<?xml version=\"1.0\"?>
 
 rm hadoop-3.3.0/etc/hadoop/workers
 
+echo checkpoint5
+
 for ip in ${WORKERS}; do echo -e "${ip}" >> hadoop-3.3.0/etc/hadoop/workers ; done
 
 #Distributing the configured library
@@ -155,12 +165,16 @@ done;
 cp hadoop-3.3.0.tgz ~/
 cd
 
+echo checkpoint6
+
 tar zxvf hadoop-3.3.0.tgz
 sudo mv hadoop-3.3.0 /opt/
 
 sudo mkdir -p /mnt/hadoop/namenode/hadoop-${USER}
 sudo chown -R hadoop:hadoop /mnt/hadoop/namenode
 echo "y" | /opt/hadoop-3.3.0/bin/hdfs namenode -format
+
+echo checkpoint7
 
 #Start Hadoop
 /opt/hadoop-3.3.0/sbin/start-dfs.sh && /opt/hadoop-3.3.0/sbin/start-yarn.sh
@@ -175,6 +189,8 @@ tar zxvf spark-3.0.1-bin-hadoop3.2.tgz
 
 cp spark-3.0.1-bin-hadoop3.2/conf/spark-env.sh.template \
     spark-3.0.1-bin-hadoop3.2/conf/spark-env.sh
+
+echo checkpoint8
 
 echo -e "
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
@@ -195,6 +211,8 @@ for i in ${WORKERS};
 do scp spark-3.0.1-bin-hadoop3.2.tgz $i:./spark-3.0.1-bin-hadoop3.2.tgz;
 done
 
+echo checkpoint9
+
 mv spark-3.0.1-bin-hadoop3.2.tgz ~/
 
 cd ~
@@ -204,6 +222,8 @@ sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2
 
 #Start Spark Cluster
 /opt/spark-3.0.1-bin-hadoop3.2/sbin/start-all.sh
+
+echo checkpoint10
 
 #Setup Geni (Clojure's spark interface)
 wget https://raw.githubusercontent.com/zero-one-group/geni/develop/scripts/geni

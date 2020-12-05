@@ -4,7 +4,7 @@
 sudo apt-get update #&& sudo apt-get upgrade -y
 sudo apt-get install -y openjdk-8-jdk-headless #non-GUI version
 
-echo test1
+echo checkpoint1
 
 #Setup hostname
 sudo dd of=/etc/hosts << EOF
@@ -22,19 +22,19 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 EOF
 
-echo test2
+echo checkpoint2
 
 #Allow hadoop user sudo rights w/o password
 sudo sh -c 'echo "hadoop ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-hadoop'
 #Reduce rate of writing to swap files
 sudo sysctl vm.swappiness=10
 
-echo test3
+echo checkpoint3
 #Allow password based SSH
 sudo sed -i "s/^PasswordAuthentication.*/PasswordAuthentication yes/" /etc/ssh/sshd_config
 sudo service sshd restart
 
-echo test4
+echo checkpoint4
 
 #cd ~
 #sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
@@ -55,7 +55,7 @@ sudo mv hadoop-3.3.0 /opt/
 sudo mkdir -p /mnt/hadoop/datanode/
 sudo chown -R hadoop:hadoop /mnt/hadoop/datanode/
 
-echo test5
+echo checkpoint5
 
 #Spark here
 #cd ~
