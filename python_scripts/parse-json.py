@@ -76,10 +76,8 @@ ff02::2 ip6-allrouters
 
 # create hosts file
 os.system("echo '# ~/hosts >> ~/hosts'")
-for i in range(n):
-    os.system(
-        "echo 172.31.23." + str(i + 4) + " hadoop-node-" + str(i + 1) + " >> ~/hosts"
-    )
+for i, ip in enumerate(outputs.values()):
+    os.system("echo " + str(ip) + " hadoop-node-" + str(i + 1) + " >> ~/hosts")
 os.system(
     "echo '# The following lines are desirable for IPv6 capable hosts >> ~/hosts'"
 )
@@ -111,13 +109,4 @@ for ip in outputs.values():
         + " -i ~/.ssh/"
         + ssh_key
         + " chmod +x setup.sh"
-    )
-    os.system(
-        "scp -i ~/.ssh/"
-        + ssh_key
-        + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-        + " /home/ubuntu/setup.sh"
-        + " ubuntu@"
-        + ip
-        + ":/home/ubuntu/setup.sh"
     )
