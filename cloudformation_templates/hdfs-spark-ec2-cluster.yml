@@ -180,15 +180,11 @@ Resources:
           - - |
               #!/bin/bash -xe
             - |
-              #cd /home/ubuntu/
+              cd /home/ubuntu/
             - |
-              #mkdir setup && cd setup
+              sleep 5m
             - |
-              #curl https://gist.githubusercontent.com/zackteo/0924304ec7616a92689dc90dcceabb25/raw/5e42aae45ba2c48a0fe6a235132c56734e9a481a/namenode.sh > setup.sh
-            - |
-              #chmod +x setup.sh
-            - |
-              #./setup.sh
+              ./setup.sh > log.txt
             - |+
   EC2Instance2:
     Type: AWS::EC2::Instance
@@ -220,13 +216,9 @@ Resources:
           - - |
               #!/bin/bash -xe
             - |
-              #cd /home/ubuntu/
+              cd /home/ubuntu/
             - |
-              #mkdir setup && cd setup
+              sleep 5m
             - |
-              #curl https://gist.githubusercontent.com/zackteo/0924304ec7616a92689dc90dcceabb25/raw/5e42aae45ba2c48a0fe6a235132c56734e9a481a/datanode.sh > setup.sh
-            - |
-              #chmod +x setup.sh
-            - |
-              #./setup.sh
+              ./setup.sh > log.txt
             - |+

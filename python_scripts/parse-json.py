@@ -113,9 +113,11 @@ for ip in outputs.values():
         + " chmod +x setup.sh"
     )
     os.system(
-        "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@"
-        + ip
-        + " -i ~/.ssh/"
+        "scp -i ~/.ssh/"
         + ssh_key
-        + " ./setup.sh > log.txt &"
+        + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+        + " home/ubuntu/setup.sh"
+        + " ubuntu@"
+        + ip
+        + ":/home/ubuntu/setup.sh"
     )
