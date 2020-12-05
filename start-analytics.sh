@@ -31,7 +31,7 @@ aws ec2 create-key-pair --key-name $aws_key_pair > ~/.ssh/$aws_key_pair.json
 
 sudo apt-get -y install jq
 
-echo -e $(jq -r .KeyMaterial ~/.ssh/$aws_key_pair.json) > $aws_key_pair.pem
+jq -r .KeyMaterial ~/.ssh/"$aws_key_pair.json" > ~/.ssh/"$aws_key_pair".pem
 
 chmod 600 ~/.ssh/$aws_key_pair.pem
 
@@ -56,4 +56,4 @@ sleep 2m
 
 aws cloudformation describe-stacks --stack-name analytics-system > ~/test.json
 
-python3 ~/book-review-site-automation/python_scripts/parse-json.py $no_of_instances $aws_key_pair.pem ~/test.json
+python3 ~/book-review-site-automation/python_scripts/parse-json.py $no_of_instances $aws_key_pair ~/test.json

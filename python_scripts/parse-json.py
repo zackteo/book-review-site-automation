@@ -24,13 +24,29 @@ for i in data["Stacks"][0]["Outputs"]:
 dns = outputs["Instance1PublicIP"]
 
 # send aws-key to namenode
+
+print(dns)
+
+command = (
+    "scp -i ~/.ssh/"
+    + ssh_key
+    + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    + " ~/.ssh/"
+    + ssh_key
+    + " ubuntu@"
+    + dns
+    + ":/.ssh/id_rsa"
+)
+
+print(command)
+
 os.system(
     "scp -i ~/.ssh/"
     + ssh_key
     + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     + " ~/.ssh/"
     + ssh_key
-    + "ubuntu@"
+    + " ubuntu@"
     + dns
     + ":/.ssh/id_rsa"
 )
