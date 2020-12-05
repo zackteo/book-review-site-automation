@@ -74,27 +74,36 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 """
 
-for ip in outputs.values():
-    os.system("sudo echo '# /etc/hosts >> /etc/hosts'")
-    for i in range(n):
-        os.system(
-            "sudo echo 172.31.23."
-            + str(i + 4)
-            + " hadoop-node-"
-            + str(i + 1)
-            + " >> /etc/hosts"
-        )
+# create hosts file
+os.system("echo '# ~/hosts >> ~/hosts'")
+for i in range(n):
     os.system(
-        "sudo echo '# The following lines are desirable for IPv6 capable hosts >> /etc/hosts'"
+        "echo 172.31.23." + str(i + 4) + " hadoop-node-" + str(i + 1) + " >> ~/hosts"
     )
-    os.system("sudo echo ::1 >> /etc/hosts")
-    os.system("sudo echo ip6-localhost ip6-loopback >> /etc/hosts")
-    os.system("sudo echo fe00::0 ip6-localnet >> /etc/hosts")
-    os.system("sudo echo ff00::0 ip6-mcastprefix >> /etc/hosts")
-    os.system("sudo echo ff02::1 ip6-allnodes >> /etc/hosts")
-    os.system("sudo echo ff02::2 ip6-allrouters >> /etc/hosts")
+os.system(
+    "echo '# The following lines are desirable for IPv6 capable hosts >> ~/hosts'"
+)
+os.system("echo ::1 >> ~/hosts")
+os.system("echo ip6-localhost ip6-loopback >> ~/hosts")
+os.system("echo fe00::0 ip6-localnet >> ~/hosts")
+os.system("echo ff00::0 ip6-mcastprefix >> ~/hosts")
+os.system("echo ff02::1 ip6-allnodes >> ~/hosts")
+os.system("echo ff02::2 ip6-allrouters >> ~/hosts")
+
+
+for ip in outputs.values():
+    os.system(
+        "sudo scp -t -i ~/.ssh/"
+        + ssh_key
+        + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+        + " ~/hosts"
+        + " ubuntu@"
+        + ip
+        + ":/etc/hosts"
+    )
+
 
 # run scripts
 for ip in outputs.keys():
     os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + "chmod +x setup.sh")
-    os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + "./setup.sh > log.txt &")
+    os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + " ./setup.sh > log.txt &")
