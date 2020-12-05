@@ -93,17 +93,17 @@ os.system("echo ff02::2 ip6-allrouters >> ~/hosts")
 
 for ip in outputs.values():
     os.system(
-        "sudo scp -t -i ~/.ssh/"
+        "scp -i ~/.ssh/"
         + ssh_key
         + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
         + " ~/hosts"
         + " ubuntu@"
         + ip
-        + ":/etc/hosts"
+        + ":/home/ubuntu/hosts"
     )
 
 
 # run scripts
-for ip in outputs.keys():
-    os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + "chmod +x setup.sh")
+for ip in outputs.values():
+    os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + " chmod +x setup.sh")
     os.system("ssh ubuntu@" + ip + " -i ~/.ssh/" + ssh_key + " ./setup.sh > log.txt &")

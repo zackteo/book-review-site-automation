@@ -5,6 +5,8 @@ sudo apt-get update #&& sudo apt-get upgrade -y
 sudo apt-get install -y openjdk-8-jdk-headless
 sudo apt-get install -y ssh
 
+sudo mv /home/ubuntu/hosts /etc/hosts
+
 echo checkpoint1
 
 #Allow hadoop user sudo rights w/o password
