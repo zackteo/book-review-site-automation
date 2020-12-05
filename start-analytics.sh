@@ -27,7 +27,13 @@ unzip awscliv2.zip
 sudo ./aws/install
 
 #create key
-aws ec2 create-key-pair --key-name $aws_key_pair > ~/.ssh/$aws_key_pair.pem
+aws ec2 create-key-pair --key-name $aws_key_pair > ~/.ssh/$aws_key_pair.json
+
+sudo apt-get -y install jq
+
+echo -e $(jq -r .KeyMaterial ~/.ssh/$aws_key_pair.json) > $aws_key_pair.pem
+
+chmod 600 ~/.ssh/$aws_key_pair.pem
 
 #install python stuff
 sudo apt-get install -y python3
@@ -46,8 +52,8 @@ python3 yml_append.py $no_of_instances
 aws cloudformation create-stack --template-body file://$(pwd)/hdfs-spark-ec2-cluster-new.yml   \
     --stack-name analytics-system --parameters ParameterKey=KeyName,ParameterValue=$aws_key_pair ParameterKey=InstanceType,ParameterValue=t2.micro
 
-sleep 1m
+sleep 2m
 
 aws cloudformation describe-stacks --stack-name analytics-system > test.json
 
-python3 $no_of_instances $aws_key_pair test.json
+python3 python_scripts/parse-json.py $no_of_instances $aws_key_pair.pem test.json

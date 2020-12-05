@@ -25,7 +25,14 @@ dns = outputs["Instance1PublicIP"]
 
 # send aws-key to namenode
 os.system(
-    "scp -i ~/.ssh/" + ssh_key + "~/.ssh/" + ssh_key + "ubuntu@" + dns + "/.ssh/id_rsa"
+    "scp -i ~/.ssh/"
+    + ssh_key
+    + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    + " ~/.ssh/"
+    + ssh_key
+    + "ubuntu@"
+    + dns
+    + ":/.ssh/id_rsa"
 )
 
 # create /etc/hosts for all
