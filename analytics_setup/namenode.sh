@@ -36,11 +36,13 @@ echo checkpoint2
 #cd ~
 sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
 
+sudo mkdir /home/hadoop/.ssh 
+
 sudo cp /home/ubuntu/.ssh/authorized_keys /home/hadoop/.ssh/authorized_keys
 
 sudo cp /home/ubuntu/.ssh/id_rsa /home/hadoop/.ssh/id_rsa
 
-su - hadoop
+sudo su hadoop
 
 cd /home/ubuntu
 
@@ -57,6 +59,13 @@ echo checkpoint4
 # update the JAVA_HOME
 export JH="\/usr\/lib\/jvm\/java-8-openjdk-amd64"
 sed -i "s/# export JAVA_HOME=.*/export\ JAVA_HOME=${JH}/g" hadoop-3.3.0/etc/hadoop/hadoop-env.sh
+
+sudo echo "export HDFS_NAMENODE_USER=hadoop
+export HDFS_DATANODE_USER=hadoop
+export HDFS_SECONDARYNAMENODE_USER=hadoop
+export YARN_RESOURCEMANAGER_USER=hadoop
+export YARN_NODEMANAGER_USER=hadoop" >> hadoop-3.3.0/etc/hadoop/hadoop-env.sh
+
 MASTER="hadoop-node-1"
 WORKERS="hadoop-node-2 hadoop-node-3 hadoop-node-4 hadoop-node-5 hadoop-node-6 hadoop-node-7 hadoop-node-8 hadoop-node-9 hadoop-node-10"  
 
@@ -224,7 +233,7 @@ sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2
 
 echo checkpoint9.5
 
-sleep 3m
+sleep 1m
 
 #Start Hadoop
 /opt/hadoop-3.3.0/sbin/start-dfs.sh && /opt/hadoop-3.3.0/sbin/start-yarn.sh

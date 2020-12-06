@@ -26,10 +26,12 @@ echo checkpoint3
 
 sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
 
+sudo mkdir /home/hadoop/.ssh 
+
 sudo cp /home/ubuntu/.ssh/authorized_keys /home/hadoop/.ssh/authorized_keys
+sudo chown -R hadoop:hadoop /home/hadoop/.ssh/authorized_keys
 
-
-su - hadoop
+sudo su hadoop
 
 cd /home/ubuntu
 
@@ -49,7 +51,7 @@ tar zxvf hadoop-3.3.0.tgz
 sudo mv hadoop-3.3.0 /opt/
 
 sudo mkdir -p /mnt/hadoop/datanode/
-sudo chown -R ubuntu:ubuntu /mnt/hadoop/datanode/
+sudo chown -R hadoop:hadoop /mnt/hadoop/datanode/
 
 echo checkpoint5
 
