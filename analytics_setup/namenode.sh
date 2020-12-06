@@ -153,7 +153,7 @@ WORKERS="hadoop-node-2 hadoop-node-3 hadoop-node-4 hadoop-node-5 hadoop-node-6 h
 
 for h in $WORKERS
 do
-scp -i /home/ubuntu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null hadoop-3.3.0.tgz ${h}:/home/ubuntu/hadoop-3.3.0.tgz >> why.txt
+scp -i /home/ubuntu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null hadoop-3.3.0.tgz ${h}:/home/ubuntu/hadoop-3.3.0.tgz 
 echo $h
 done
 
@@ -203,7 +203,7 @@ WORKERS="hadoop-node-2 hadoop-node-3 hadoop-node-4 hadoop-node-5 hadoop-node-6 h
 
 for i in ${WORKERS}
 do
-scp -i /home/ubuntu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null spark-3.0.1-bin-hadoop3.2.tgz ${i}:/home/ubuntu/spark-3.0.1-bin-hadoop3.2.tgz >> why.txt
+scp -i /home/ubuntu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null spark-3.0.1-bin-hadoop3.2.tgz ${i}:/home/ubuntu/spark-3.0.1-bin-hadoop3.2.tgz
 echo $i
 done
 
