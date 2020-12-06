@@ -1,0 +1,4 @@
+boto3==1.16.30
+python-decouple==3.3
+botocore~=1.19.30
+fabric~=2.5.0
