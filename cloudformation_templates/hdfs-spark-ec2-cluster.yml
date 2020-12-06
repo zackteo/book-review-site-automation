@@ -130,6 +130,12 @@ Resources:
         ToPort: '22'
         CidrIp:
           Ref: SSHLocation
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '3000'
+        ToPort: '3000'
+        CidrIp:
+          Ref: Hadoop          
       SecurityGroupEgress:
       - IpProtocol: -1
         CidrIp: 0.0.0.0/0
@@ -210,6 +216,7 @@ Resources:
         DeviceIndex: '0'
         GroupSet:
         - !Ref InstanceSecurityGroup
+        AssociatePublicIpAddress: true
       UserData: !Base64
         'Fn::Join':
           - ''

@@ -46,7 +46,7 @@ stuff = """  EC2Instance<<number+2>>:
         DeviceIndex: '0'
         GroupSet:
         - !Ref InstanceSecurityGroup
-        #AssociatePublicIpAddress: true
+        AssociatePublicIpAddress: true
       UserData: !Base64
         'Fn::Join':
           - ''

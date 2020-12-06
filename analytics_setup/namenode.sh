@@ -141,15 +141,18 @@ echo checkpoint5
 for ip in ${WORKERS}; do echo -e "${ip}" >> hadoop-3.3.0/etc/hadoop/workers ; done
 
 #Distributing the configured library
-sudo tar czvf hadoop-3.3.0.tgz hadoop-3.3.0
+tar czvf hadoop-3.3.0.tgz hadoop-3.3.0
+echo checkpoint6
+
 for h in $WORKERS ; do
-scp hadoop-3.3.0.tgz $h:.;
+scp hadoop-3.3.0.tgz $h:/home/ubuntu/hadoop-3.3.0.tgz;
 done;
+
+
+echo checkpoint7
 
 cp hadoop-3.3.0.tgz ~/
 cd
-
-echo checkpoint6
 
 tar zxvf hadoop-3.3.0.tgz
 sudo mv hadoop-3.3.0 /opt/
@@ -158,11 +161,7 @@ sudo mkdir -p /mnt/hadoop/namenode/hadoop-${USER}
 sudo chown -R hadoop:hadoop /mnt/hadoop/namenode
 echo "y" | /opt/hadoop-3.3.0/bin/hdfs namenode -format
 
-echo checkpoint7
-
-#Start Hadoop
-/opt/hadoop-3.3.0/sbin/start-dfs.sh && /opt/hadoop-3.3.0/sbin/start-yarn.sh
-
+echo checkpoint7.5
 
 #Spark here
 cd download
@@ -192,7 +191,7 @@ export PYSPARK_PYTHON=python3
 tar czvf spark-3.0.1-bin-hadoop3.2.tgz spark-3.0.1-bin-hadoop3.2/
 
 for i in ${WORKERS};
-do scp spark-3.0.1-bin-hadoop3.2.tgz $i:./spark-3.0.1-bin-hadoop3.2.tgz;
+do scp spark-3.0.1-bin-hadoop3.2.tgz $i:/home/ubuntu/spark-3.0.1-bin-hadoop3.2.tgz;
 done
 
 echo checkpoint9
@@ -203,6 +202,15 @@ cd ~
 tar zxvf spark-3.0.1-bin-hadoop3.2.tgz
 sudo mv spark-3.0.1-bin-hadoop3.2 /opt/
 sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2
+
+echo checkpoint9.5
+
+sleep 3m
+
+#Start Hadoop
+/opt/hadoop-3.3.0/sbin/start-dfs.sh && /opt/hadoop-3.3.0/sbin/start-yarn.sh
+
+echo checkpoint9.75
 
 #Start Spark Cluster
 /opt/spark-3.0.1-bin-hadoop3.2/sbin/start-all.sh
