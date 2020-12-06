@@ -346,8 +346,8 @@ while (not success):
 
 # print('-----------------------------------these are the ip address of the instances------------------------------')
 
-# print('mongo ip\n', mongo_ip)
-# print('mysql ip\n', mysql_ip)
+print('MongoDB IP:', mongo_ip)
+print('MySQL IP:', mysql_ip)
 print("------------------------------Front end website below--------------------------")
 
 print('Website is at:')
@@ -355,7 +355,7 @@ print(f"{web_ip:3000}")
 print('Just copy paste this into the browser')
 try:
     c = theconnector(web_ip, key_pair)
-    c.run('cd db_flask_server && sudo python3 app.py')
+    print("Run website")
 
 except ValueError:
     pass
