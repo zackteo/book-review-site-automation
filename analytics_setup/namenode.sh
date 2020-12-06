@@ -235,18 +235,19 @@ tar zxvf spark-3.0.1-bin-hadoop3.2.tgz
 sudo mv spark-3.0.1-bin-hadoop3.2 /opt/
 sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2
 
-sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2/logs
-
 echo checkpoint9.5
 
 sleep 1m
 
-#Start Hadoop
+# Start Hadoop
+# MAY HAVE TO MANUALLY SSH SWITCH TO HADOOP USER AND RUN FROM HERE 
+#
 /opt/hadoop-3.3.0/sbin/start-dfs.sh && /opt/hadoop-3.3.0/sbin/start-yarn.sh
 
 echo checkpoint9.75
 
-#Start Spark Cluster
+sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2/logs
+# Start Spark Cluster
 /opt/spark-3.0.1-bin-hadoop3.2/sbin/start-all.sh
 
 echo checkpoint10
@@ -263,10 +264,12 @@ unzip meta_kindle_store.zip
 /opt/hadoop-3.3.0/bin/hdfs dfs -put meta_Kindle_Store.json /
 
 
+sudo apt-get install -y python3-venv
 mkdir spark_scripts
 sudo chown -R ubuntu:ubuntu /home/ubuntu/spark_scripts
 cd spark_scripts
 python3 -m venv .venv
+sudo chown -R ubuntu:ubuntu /home/ubuntu/spark_scripts/.venv
 source .venv/bin/activate
 python3 -m pip install --upgrade pip
 pip3 install numpy pyspark
