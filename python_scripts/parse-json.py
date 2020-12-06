@@ -117,3 +117,36 @@ for ip in outputs.values():
         + ssh_key
         + " chmod +x setup.sh"
     )
+
+# send spark scripts
+os.system(
+    "scp -i ~/.ssh/"
+    + ssh_key
+    + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    + " ~/book-review-site-automation/spark_scripts/pearson.py"
+    + " ubuntu@"
+    + dns
+    + ":/home/ubuntu/pearson.py"
+)
+
+os.system(
+    "scp -i ~/.ssh/"
+    + ssh_key
+    + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    + " ~/book-review-site-automation/spark_scripts/tfidf.py"
+    + " ubuntu@"
+    + dns
+    + ":/home/ubuntu/tfidf.py"
+)
+
+os.system("echo hdfs://" + str(dns) + ":9000/ > ~/namenode_ip.txt")
+
+os.system(
+    "scp -i ~/.ssh/"
+    + ssh_key
+    + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    + " ~/namenode_ip.txt"
+    + " ubuntu@"
+    + dns
+    + ":/home/ubuntu/namenode_ip.txt"
+)
