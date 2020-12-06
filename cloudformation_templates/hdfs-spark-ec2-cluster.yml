@@ -130,7 +130,6 @@ Resources:
         ToPort: '22'
         CidrIp:
           Ref: SSHLocation
-      SecurityGroupIngress:
       - IpProtocol: tcp
         FromPort: '3000'
         ToPort: '3000'
