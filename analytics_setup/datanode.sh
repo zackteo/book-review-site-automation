@@ -25,6 +25,10 @@ sudo service sshd restart
 echo checkpoint3
 
 sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
+
+sudo cp /home/ubuntu/.ssh/authorized_keys /home/hadoop/.ssh/authorized_keys
+
+
 su - hadoop
 
 cd /home/ubuntu
