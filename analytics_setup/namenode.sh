@@ -149,7 +149,7 @@ tar czvf hadoop-3.3.0.tgz hadoop-3.3.0
 echo checkpoint6
 
 for h in $WORKERS ; do
-scp -i /home/ubunu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null hadoop-3.3.0.tgz $h:/home/ubuntu/hadoop-3.3.0.tgz;
+scp -i /home/ubuntu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null hadoop-3.3.0.tgz $h:/home/ubuntu/hadoop-3.3.0.tgz;
 done;
 
 
@@ -195,7 +195,7 @@ export PYSPARK_PYTHON=python3
 tar czvf spark-3.0.1-bin-hadoop3.2.tgz spark-3.0.1-bin-hadoop3.2/
 
 for i in ${WORKERS};
-do scp -i /home/ubunu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null spark-3.0.1-bin-hadoop3.2.tgz $i:/home/ubuntu/spark-3.0.1-bin-hadoop3.2.tgz;
+do scp -i /home/ubuntu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null spark-3.0.1-bin-hadoop3.2.tgz $i:/home/ubuntu/spark-3.0.1-bin-hadoop3.2.tgz;
 done
 
 echo checkpoint9
