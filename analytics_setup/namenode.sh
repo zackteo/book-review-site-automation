@@ -21,17 +21,19 @@ sudo sysctl vm.swappiness=10
 sudo sed -i "s/^PasswordAuthentication.*/PasswordAuthentication yes/" /etc/ssh/sshd_config
 sudo service sshd restart
 #Copy generated public key from name node to worker nodes
-#ssh-copy-id hadoop-master
-#ssh-copy-id hadoop-worker-1
-#ssh-copy-id hadoop-worker-2
-#ssh-copy-id hadoop-worker-3
+#ssh-copy-id hadoop-node-1
+#ssh-copy-id hadoop-node-2
+#ssh-copy-id hadoop-node-3
+#ssh-copy-id hadoop-node-4
 
 echo checkpoint2
 
 #Change user to hadoop
-cd ~
-sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
-sudo su hadoop
+#cd ~
+#sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
+sudo su ubuntu
+
+cd /ubuntu/home
 
 echo checkpoint3
 
@@ -140,12 +142,14 @@ echo checkpoint5
 
 for ip in ${WORKERS}; do echo -e "${ip}" >> hadoop-3.3.0/etc/hadoop/workers ; done
 
+for ip in ${WORKERS}; do echo -e "${ip}"  ; done
+
 #Distributing the configured library
 tar czvf hadoop-3.3.0.tgz hadoop-3.3.0
 echo checkpoint6
 
 for h in $WORKERS ; do
-scp hadoop-3.3.0.tgz $h:/home/ubuntu/hadoop-3.3.0.tgz;
+scp -i /home/ubunu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null hadoop-3.3.0.tgz $h:/home/ubuntu/hadoop-3.3.0.tgz;
 done;
 
 
@@ -158,7 +162,7 @@ tar zxvf hadoop-3.3.0.tgz
 sudo mv hadoop-3.3.0 /opt/
 
 sudo mkdir -p /mnt/hadoop/namenode/hadoop-${USER}
-sudo chown -R hadoop:hadoop /mnt/hadoop/namenode
+sudo chown -R ubuntu:ubuntu /mnt/hadoop/namenode
 echo "y" | /opt/hadoop-3.3.0/bin/hdfs namenode -format
 
 echo checkpoint7.5
@@ -191,7 +195,7 @@ export PYSPARK_PYTHON=python3
 tar czvf spark-3.0.1-bin-hadoop3.2.tgz spark-3.0.1-bin-hadoop3.2/
 
 for i in ${WORKERS};
-do scp spark-3.0.1-bin-hadoop3.2.tgz $i:/home/ubuntu/spark-3.0.1-bin-hadoop3.2.tgz;
+do scp -i /home/ubunu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null spark-3.0.1-bin-hadoop3.2.tgz $i:/home/ubuntu/spark-3.0.1-bin-hadoop3.2.tgz;
 done
 
 echo checkpoint9

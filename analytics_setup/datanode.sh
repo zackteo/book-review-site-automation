@@ -21,9 +21,10 @@ sudo service sshd restart
 
 echo checkpoint3
 
-#cd ~
 #sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
-#sudo su hadoop
+sudo su ubuntu
+
+cd /ubuntu/home
 
 #once got configured install from namenode ...
 
@@ -41,7 +42,7 @@ tar zxvf hadoop-3.3.0.tgz
 sudo mv hadoop-3.3.0 /opt/
 
 sudo mkdir -p /mnt/hadoop/datanode/
-sudo chown -R hadoop:hadoop /mnt/hadoop/datanode/
+sudo chown -R ubuntu:ubuntu /mnt/hadoop/datanode/
 
 echo checkpoint5
 
