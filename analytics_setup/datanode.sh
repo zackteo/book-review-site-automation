@@ -9,7 +9,8 @@ sudo mv /home/ubuntu/hosts /etc/hosts
 echo checkpoint1
 
 #Allow hadoop user sudo rights w/o password
-sudo sh -c 'echo "hadoop ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-hadoop'
+sudo sh -c 'echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-ubuntu'
+sudo sh -c 'echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-hadoop'
 #Reduce rate of writing to swap files
 sudo sysctl vm.swappiness=10
 
