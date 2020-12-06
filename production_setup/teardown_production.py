@@ -1,7 +1,7 @@
 import boto3
 import sys, os
 from dotenv import load_dotenv
-import environment_production
+import teardown_environment_production
 sys.path.append('../')
 import credentials
 import ast
@@ -22,9 +22,9 @@ session = boto3.session.Session(
 ec2_resource = session.resource('ec2')
 
 
-ids = environment_production.ec2_ids
-security_grps = environment_production.security_groups
-key_pair = environment_production.key_pair
+ids = teardown_environment_production.ec2_ids
+security_grps = teardown_environment_production.security_groups
+key_pair = teardown_environment_production.key_pair
 
 ec2 = boto3.client(
     'ec2',

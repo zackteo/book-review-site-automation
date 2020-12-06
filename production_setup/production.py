@@ -18,7 +18,7 @@ aws_secret_access_key = input('Please key in your AWS secret access key: ')
 aws_session_token = input('Please key in your session token: ')
 region_name = 'us-east-1'
 
-credentials_file = open("../credentials", 'w')
+credentials_file = open("../credentials.py", 'w')
 credentials_file.write('aws_access_key_id={}\n'.format(aws_access_key_id))
 credentials_file.write('aws_secret_access_key={}\n'.format(aws_secret_access_key))
 credentials_file.write('aws_session_token={}\n'.format(aws_session_token))
@@ -201,7 +201,7 @@ name_of_collection_user_logs = 'log'
 mongo_url = '{}'.format(mongo_ip)  # insert mongo url here
 
 # ------------------------------------- writing to an environment file for teardown ------------------------------
-teardown_environment_file = open("teardown_environment_production.txt", "w")
+teardown_environment_file = open("teardown_environment_production.py", "w")
 teardown_environment_file.write('ec2_ids={}\n'.format(all_node_ids))
 teardown_environment_file.write('security_groups={}\n'.format(all_node_security_groups))
 teardown_environment_file.write('key_pair=\'{}\''.format(key_pair))
