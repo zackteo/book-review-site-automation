@@ -42,6 +42,10 @@ sudo cp /home/ubuntu/.ssh/authorized_keys /home/hadoop/.ssh/authorized_keys
 
 sudo cp /home/ubuntu/.ssh/id_rsa /home/hadoop/.ssh/id_rsa
 
+sudo chown -R hadoop:hadoop /home/hadoop/.ssh/
+sudo chown -R hadoop:hadoop /home/hadoop/.ssh/authorized_keys
+sudo chown -R hadoop:hadoop /home/hadoop/.ssh/id_rsa
+
 sudo su hadoop
 
 cd /home/ubuntu
@@ -230,6 +234,8 @@ cd /home/ubuntu
 tar zxvf spark-3.0.1-bin-hadoop3.2.tgz
 sudo mv spark-3.0.1-bin-hadoop3.2 /opt/
 sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2
+
+sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2/logs
 
 echo checkpoint9.5
 

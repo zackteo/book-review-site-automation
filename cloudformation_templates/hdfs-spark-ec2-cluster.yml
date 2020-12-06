@@ -133,7 +133,15 @@ Resources:
       - IpProtocol: tcp
         FromPort: '3000'
         ToPort: '3000'
-        CidrIp: 0.0.0.0/0         
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '9000'
+        ToPort: '9000'
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '50070'
+        ToPort: '50070'
+        CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
       - IpProtocol: -1
         CidrIp: 0.0.0.0/0
