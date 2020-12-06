@@ -23,7 +23,7 @@ sudo service sshd restart
 echo checkpoint3
 
 #sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
-sudo su ubuntu
+su - ubuntu
 
 cd /home/ubuntu
 

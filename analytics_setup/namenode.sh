@@ -32,7 +32,7 @@ echo checkpoint2
 #Change user to hadoop
 #cd ~
 #sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
-sudo su ubuntu
+su - ubuntu
 
 cd /home/ubuntu
 
