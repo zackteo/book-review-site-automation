@@ -3,6 +3,7 @@
 import json
 import sys
 import os
+import collections
 
 n = int(sys.argv[1])  # var1
 ssh_key = sys.argv[2] + ".pem"
@@ -74,9 +75,15 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 """
 
+print(outputs)
+
+ordered_outputs = collections.OrderedDict(sorted(outputs.items()))
+
+print(ordered_outputs)
+
 # create hosts file
 os.system("echo '# ~/hosts >> ~/hosts'")
-for i, ip in enumerate(outputs.values()):
+for i, ip in enumerate(ordered_outputs.values()):
     os.system("echo " + str(ip) + " hadoop-node-" + str(i + 1) + " >> ~/hosts")
 os.system(
     "echo '# The following lines are desirable for IPv6 capable hosts >> ~/hosts'"
