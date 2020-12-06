@@ -25,11 +25,11 @@ echo checkpoint3
 #sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
 sudo su ubuntu
 
-cd /ubuntu/home
+cd /home/ubuntu
 
 #once got configured install from namenode ...
 
-while [ ! -f /ubuntu/home/hadoop-3.3.0.tgz ]
+while [ ! -f /home/ubuntu/hadoop-3.3.0.tgz ]
 do
   sleep 30s # or less like 0.2
   echo "Waiting for hadoop"
@@ -37,7 +37,7 @@ done
 
 echo checkpoint4
 
-cd /ubuntu/home
+cd /home/ubuntu
 
 tar zxvf hadoop-3.3.0.tgz
 sudo mv hadoop-3.3.0 /opt/
@@ -48,13 +48,13 @@ sudo chown -R ubuntu:ubuntu /mnt/hadoop/datanode/
 echo checkpoint5
 
 #Spark here
-while [ ! -f /ubuntu/home/spark-3.0.1-bin-hadoop3.2.tgz ]
+while [ ! -f /home/ubuntu/spark-3.0.1-bin-hadoop3.2.tgz ]
 do
   sleep 30s # or less like 0.2
   echo "Waiting for spark"
 done
 
-cd ~
+cd /home/ubuntu
 tar zxvf spark-3.0.1-bin-hadoop3.2.tgz
 sudo mv spark-3.0.1-bin-hadoop3.2 /opt/
 sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2

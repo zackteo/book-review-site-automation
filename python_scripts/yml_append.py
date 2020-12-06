@@ -55,7 +55,7 @@ stuff = """  EC2Instance<<number+2>>:
             - |
               cd /home/ubuntu/
             - |
-              sleep 5m
+              sleep 3m
             - |
               ./setup.sh > log.txt
             - |+

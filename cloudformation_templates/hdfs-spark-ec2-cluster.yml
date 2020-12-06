@@ -186,7 +186,7 @@ Resources:
             - |
               cd /home/ubuntu/
             - |
-              sleep 5m
+              sleep 3m
             - |
               ./setup.sh > log.txt
             - |+
@@ -223,7 +223,7 @@ Resources:
             - |
               cd /home/ubuntu/
             - |
-              sleep 5m
+              sleep 3m
             - |
               ./setup.sh > log.txt
             - |+
