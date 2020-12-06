@@ -11,6 +11,8 @@ echo checkpoint1
 #Allow hadoop user sudo rights w/o password
 sudo sh -c 'echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-ubuntu'
 sudo sh -c 'echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-hadoop'
+sudo sh -c 'echo "hadoop ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-ubuntu'
+sudo sh -c 'echo "hadoop ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-hadoop'
 #Reduce rate of writing to swap files
 sudo sysctl vm.swappiness=10
 
@@ -22,8 +24,8 @@ sudo service sshd restart
 
 echo checkpoint3
 
-#sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
-su - ubuntu
+sudo adduser --disabled-password --shell /bin/bash --gecos "User" hadoop
+su - hadoop
 
 cd /home/ubuntu
 
@@ -57,4 +59,4 @@ done
 cd /home/ubuntu
 tar zxvf spark-3.0.1-bin-hadoop3.2.tgz
 sudo mv spark-3.0.1-bin-hadoop3.2 /opt/
-sudo chown -R ubuntu:ubuntu /opt/spark-3.0.1-bin-hadoop3.2
+sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2
