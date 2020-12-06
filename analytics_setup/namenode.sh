@@ -149,11 +149,12 @@ for ip in ${WORKERS}; do echo -e "${ip}"  ; done
 tar czvf hadoop-3.3.0.tgz hadoop-3.3.0
 echo checkpoint6
 
+WORKERS="hadoop-node-2 hadoop-node-3 hadoop-node-4 hadoop-node-5 hadoop-node-6 hadoop-node-7 hadoop-node-8 hadoop-node-9 hadoop-node-10"  
+
 for h in $WORKERS
 do
-sudo scp -i /home/ubuntu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null hadoop-3.3.0.tgz ${h}:/home/ubuntu/hadoop-3.3.0.tgz >> why.txt
+scp -i /home/ubuntu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null hadoop-3.3.0.tgz ${h}:/home/ubuntu/hadoop-3.3.0.tgz >> why.txt
 echo $h
-echo ${h}why
 done
 
 
@@ -198,11 +199,12 @@ export PYSPARK_PYTHON=python3
 
 tar czvf spark-3.0.1-bin-hadoop3.2.tgz spark-3.0.1-bin-hadoop3.2/
 
+WORKERS="hadoop-node-2 hadoop-node-3 hadoop-node-4 hadoop-node-5 hadoop-node-6 hadoop-node-7 hadoop-node-8 hadoop-node-9 hadoop-node-10"  
+
 for i in ${WORKERS}
 do
-sudo scp -i /home/ubuntu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null spark-3.0.1-bin-hadoop3.2.tgz ${i}:/home/ubuntu/spark-3.0.1-bin-hadoop3.2.tgz >> why.txt
+scp -i /home/ubuntu/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null spark-3.0.1-bin-hadoop3.2.tgz ${i}:/home/ubuntu/spark-3.0.1-bin-hadoop3.2.tgz >> why.txt
 echo $i
-echo ${i}why
 done
 
 echo checkpoint9
