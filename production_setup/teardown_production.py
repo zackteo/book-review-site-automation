@@ -7,9 +7,8 @@ import credentials
 import ast
 import time
 
-
-
-
+# AWS credentials needed for teardown
+# Taken from archive - saved from setup
 session = boto3.session.Session(
     aws_access_key_id=credentials.aws_access_key_id,
     aws_secret_access_key=credentials.aws_secret_access_key,
@@ -17,11 +16,8 @@ session = boto3.session.Session(
     region_name=credentials.region_name
     )
 
-    
 
 ec2_resource = session.resource('ec2')
-
-
 ids = teardown_environment_production.ec2_ids
 security_grps = teardown_environment_production.security_groups
 key_pair = teardown_environment_production.key_pair
@@ -36,19 +32,20 @@ ec2 = boto3.client(
     
 waiter = ec2.get_waiter('instance_terminated')
 
-# terminate the instances
-# ec2_resource.instances.filter(InstanceIds = ids).terminate()
 
+# Terminate EC2 instances
 ec2.terminate_instances(InstanceIds = ids)
-print("Waiting for instances  to terminate")
+print("AWS EC2 instances are terminating, please wait...")
 waiter.wait(InstanceIds=ids)
+print("---->AWS EC2 instances terminated")
 
+time.sleep(60)
 
-# # delete the key
+# Delete Key Pair
 delete_key =  ec2.delete_key_pair(KeyName=key_pair)
+print("---->AWS Key Pairs used are deleted")
 
-print("Waiting for Keys to be deleted")
-# time.sleep(60)
+time.sleep(60)
 
 ec2 = boto3.client(
     'ec2',
@@ -58,10 +55,12 @@ ec2 = boto3.client(
     region_name=credentials.region_name
     )
 
-# # remove the security groups
+# Delete AWS Security Groups used
+print("Deleting AWS security groups...")
 for sgid in security_grps:
-    print(sgid)
     delete_sg = ec2.delete_security_group(GroupId=sgid)
+    print("Deleted", sgid)
+print("---->AWS Security Groups are deleted")
 
 
 print('--------------------------------Done with tearing down the Production System fully----------------------------------')

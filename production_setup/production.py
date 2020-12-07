@@ -10,6 +10,7 @@ from analytics_functions import *
 
 sys.path.append('../')
 
+print("=====================================================================")
 print("Start of production automation - please follow the following instructions to key in necessary aws credentials \n")
 
 # Request for AWS Credentials
@@ -18,11 +19,17 @@ aws_secret_access_key = input('Please key in your AWS secret access key: ')
 aws_session_token = input('Please key in your session token: ')
 region_name = 'us-east-1'
 
+print("==================================================================================")
+print("==================================================================================")
+print("=======================Starting set up of Production System=======================")
+print("==================================================================================")
+print("==================================================================================")
+
 credentials_file = open("../credentials.py", 'w')
-credentials_file.write('aws_access_key_id={}\n'.format(aws_access_key_id))
-credentials_file.write('aws_secret_access_key={}\n'.format(aws_secret_access_key))
-credentials_file.write('aws_session_token={}\n'.format(aws_session_token))
-credentials_file.write('region_name={}\n'.format(region_name))
+credentials_file.write('aws_access_key_id=\'{}\'\n'.format(aws_access_key_id))
+credentials_file.write('aws_secret_access_key=\'{}\'\n'.format(aws_secret_access_key))
+credentials_file.write('aws_session_token=\'{}\'\n'.format(aws_session_token))
+credentials_file.write('region_name=\'{}\'\n'.format(region_name))
 credentials_file.close()
 
 
@@ -35,7 +42,8 @@ ec2 = boto3.client(
 )
 
 list_ec2_instances(ec2)
-# -------------------------------------------- Set all the security group config ------------------------------------------------
+# ---------------------------------------------------------------------------------------
+# Security Group Configurations
 
 ## Permissions for MongoDB
 permissions_mongodb = [{'IpProtocol': 'tcp',
@@ -99,7 +107,8 @@ permissions_web = [{'IpProtocol': 'tcp',
                         'CidrIp': '0.0.0.0/0',
                         'Description': 'HTTP'}]}]
 
-# -------------------------------------------- create the security groups ------------------------------------------------
+# ---------------------------------------------------------------------------------------
+# Create AWS Security Groups
 mongodb_security_group_name = 'MongoDB'
 mongodb_des = 'MongoDB'
 mongodb_secure = create_security_group(mongodb_security_group_name, mongodb_des, permissions_mongodb, ec2)
@@ -112,7 +121,8 @@ web_security_group_name = 'FE_Server'
 web_des = 'FE_Server'
 web_secure = create_security_group(web_security_group_name, web_des, permissions_web, ec2)
 
-# -------------------------------------------- create the key_pair ------------------------------------------------
+# ---------------------------------------------------------------------------------------
+# Create AWS Key Pair
 key_pair = 'kindleAutomationKeyPair'
 # test to see if this key name already exists
 create_key_pair(key_pair, ec2)
@@ -121,8 +131,8 @@ create_key_pair(key_pair, ec2)
 tier = 't2.medium'
 instance_ami = 'ami-00ddb0e5626798373'  # using the basic image with ubuntu18.04LTS
 
-# -------------------------------------------- getting the necessary IPs ------------------------------------------------
-
+# ---------------------------------------------------------------------------------------
+# Retrieving IP addresses used
 mongo_instance = create_instances(instance_ami, 1, tier, key_pair, mongodb_secure, ec2, 'mongo')
 mongo_node_id = mongo_instance[0]
 
@@ -159,8 +169,8 @@ all_node_security_groups = [mongodb_secure, mysql_secure, web_secure]
 print("Waiting for instances  to start up")
 time.sleep(60)
 
-# ---------------------------------- update the packages ------------------------------------------- >
-
+# ---------------------------------------------------------------------------------------
+# Update packages in instances
 
 for instance_ip in all_node_ips:
     success = False
@@ -175,8 +185,8 @@ for instance_ip in all_node_ips:
             print('Command not successful, retrying')
             time.sleep(10)
 
-# ------------------------------------------- reboot ---------------------------------------------------- >
-
+# ---------------------------------------------------------------------------------------
+# Reboot
 try:
     ec2.reboot_instances(InstanceIds=all_node_ids, DryRun=True)
 except ClientError as e:
@@ -192,22 +202,30 @@ except ClientError as e:
 
 time.sleep(60)
 
-# ------------------------------------------- DATABASE CONFIGURATIONS ---------------------------------------------------- >
-
+print("==================================================================================")
+print("==================================================================================")
+print("=======================Saving Details for Teardown later on=======================")
+print("==================================================================================")
+print("==================================================================================")
+# ---------------------------------------------------------------------------------------
+# DATABASE Configurations
 name_of_db_meta_data = 'kindle'
 name_of_collection_meta_data = 'metadata'
 name_of_db_user_logs = 'kindle'
 name_of_collection_user_logs = 'log'
 mongo_url = '{}'.format(mongo_ip)  # insert mongo url here
 
-# ------------------------------------- writing to an environment file for teardown ------------------------------
+# ---------------------------------------------------------------------------------------
+# Write AWS IDs to file for tear down later on
 teardown_environment_file = open("teardown_environment_production.py", "w")
 teardown_environment_file.write('ec2_ids={}\n'.format(all_node_ids))
 teardown_environment_file.write('security_groups={}\n'.format(all_node_security_groups))
 teardown_environment_file.write('key_pair=\'{}\''.format(key_pair))
 teardown_environment_file.close()
 
-# ------------------------------------ writing to env file for the frontend server to know the IPs to use --------------------------
+# ---------------------------------------------------------------------------------------
+# Write IPs to .env file
+# To be transferred to frontend server and used by frontend
 environment_file = open("../.env", 'w')
 environment_file.write('database_name_meta_data={}\n'.format(name_of_db_meta_data))
 environment_file.write('database_name_user_logs={}\n'.format(name_of_collection_meta_data))
@@ -215,16 +233,14 @@ environment_file.write('URL_METADATA_MONGODB={}\n'.format(mongo_url))
 environment_file.write('URL_MYSQL_REVIEWS={}\n'.format(mysql_ip))
 environment_file.close()
 
-# # ------------------------ writing to a js file for the front-end -----------------
-# ip_js = open("ip.js", 'w')
-# ip_js.write('const ip = {\n')
-# ip_js.write('   ip:"{}:5000"\n'.format(web_ip))
-# ip_js.write('};\n')
-# ip_js.write('\n')
-# ip_js.write('export { ip }\n')
-# ip_js.close()
 
-# -------------------------------- set up mongodb instance-----------------------
+# ---------------------------------------------------------------------------------------
+# Set up MongoDB Database Server - kindle metadata
+print("==================================================================================")
+print("==================================================================================")
+print("=======================Setting Up MongoDB Database Server=========================")
+print("==================================================================================")
+print("==================================================================================")
 success = False
 while (not success):
     try:
@@ -270,10 +286,14 @@ while (not success):
         print('Command not successful, retrying')
         time.sleep(10)
 
-# -------------------------------- set up mysql instance -----------------------
-# # Prepare the Mqsql instance
+# ---------------------------------------------------------------------------------------
+# Set up MySQL Database Server - kindle reviews
+print("==================================================================================")
+print("==================================================================================")
+print("=======================Setting Up MySQL Database Server===========================")
+print("==================================================================================")
+print("==================================================================================")
 success = False
-
 while (not success):
     try:
         c = theconnector(mysql_ip, key_pair)
@@ -325,7 +345,13 @@ while (not success):
         print('Command not successful, retrying')
         time.sleep(10)
 
-# -------------------------------- set up server instance -----------------------
+# ---------------------------------------------------------------------------------------
+# Set up Frontend Server
+print("==================================================================================")
+print("==================================================================================")
+print("=======================Setting Up Clojure Frontend Server=========================")
+print("==================================================================================")
+print("==================================================================================")
 success = False
 while (not success):
     try:
@@ -333,34 +359,53 @@ while (not success):
 
         c.sudo('apt update -y')
         c.sudo('apt upgrade -y')
+        print('----------------------------------------step 0 done---------------------------------------')
         c.sudo('apt install unzip')
         c.sudo('apt install -y openjdk-8-jre-headless')
         c.sudo('apt install -y leiningen')
+        c.sudo('apt-get install curl')
+        c.sudo('apt install xsel')
+        print('----------------------------------------step 1 done---------------------------------------')
+        c.run('curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -')
+        print('----------------------------------------step 2 done---------------------------------------')
+        c.sudo('apt-get -y install nodejs')
+        print('----------------------------------------step 3 done---------------------------------------')
+        c.sudo('npm install -g serve')
+        print('----------------------------------------step 4 done---------------------------------------')
+        c.run('wget -c https://kindle-production-system.s3.amazonaws.com/dbfrontend.zip -O dbfrontend.zip')
+        print('----------------------------------------step 5 done---------------------------------------')
+        c.run('unzip dbfrontend.zip')
+        print('----------------------------------------step 5 done---------------------------------------')
         c.put('../.env')
-        print("to be done - pseudo git pull frontend")
+        c.run('mv .env dbfrontend')
+        print('----------------------------------------step 6 done---------------------------------------')
+        c.run('screen -dmSL mainlein serve ./dbfrontend/resources/public -p 3000')
+        print('----------------------------------------step 7 done---------------------------------------')
         success = True
     except:
         # If any commands fail
         print('Command not successful, retrying')
         time.sleep(10)
 
-# print('-----------------------------------these are the ip address of the instances------------------------------')
+# ---------------------------------------------------------------------------------------
+# END - print IP addresses to console
+print("==================================================================================")
+print("==================================================================================")
+print("=======================DONE WITH SETUP============================================")
+print("==================================================================================")
+print("==================================================================================")
+print("Printing useful details below......")
 
-print('MongoDB IP:', mongo_ip)
-print('MySQL IP:', mysql_ip)
-print("------------------------------Front end website below--------------------------")
 
+print('MongoDB Server IP:', mongo_ip)
+print('MySQL Server IP:', mysql_ip)
+print('Frontend Server IP:', web_ip)
+print("--------------------------Please visit our website--------------------------")
 print('Website is at:')
-print(f"{web_ip:3000}")
-print('Just copy paste this into the browser')
-try:
-    c = theconnector(web_ip, key_pair)
-    print("Run website")
-
-except ValueError:
-    pass
-
-print("------------------------Done-------------------------")
+print(f"{web_ip}:3000")
+print('Copy paste this into your browser')
+print()
+print('Done with set up programme')
 
 
 
