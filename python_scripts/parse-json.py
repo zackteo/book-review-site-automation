@@ -108,7 +108,7 @@ for ip in outputs.values():
     )
 
 for i in range(2, len(ordered_outputs) + 1):
-    os.system("echo -e hadoop-node-" + str(i) + " >> ~/workers")
+    os.system("echo hadoop-node-" + str(i) + " >> ~/workers")
 
 for ip in outputs.values():
     os.system(
