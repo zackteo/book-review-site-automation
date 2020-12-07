@@ -98,27 +98,6 @@ Mappings:
       HVM64: ami-01fee56b22f308154
       HVMG2: ami-0fe84a5b4563d8f27
 Resources:
-  PublicSubnet1:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      CidrBlock: 172.31.23.0/24
-      MapPublicIpOnLaunch: true
-      VpcId: !Ref VPCloud
-    DependsOn:
-      - VPCloud
-  VPCGatewayAttachment:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      VpcId: !Ref VPCloud
-      InternetGatewayId: !Ref InternetGateway
-  InternetGateway:
-    Type: 'AWS::EC2::InternetGateway'
-  VPCloud:
-    Type: 'AWS::EC2::VPC'
-    Properties:
-      CidrBlock: 172.31.23.0/16
-      EnableDnsHostnames: true
-      EnableDnsSupport: true
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -142,33 +121,30 @@ Resources:
         FromPort: '50070'
         ToPort: '50070'
         CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '3000'
+        ToPort: '3000'
+        CidrIp: '::/0'
+      - IpProtocol: tcp
+        FromPort: '9000'
+        ToPort: '9000'
+        CidrIp: '::/0'
+      - IpProtocol: tcp
+        FromPort: '50070'
+        ToPort: '50070'
+        CidrIp: '::/0'
       SecurityGroupEgress:
       - IpProtocol: -1
         CidrIp: 0.0.0.0/0
-  RouteTable:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref VPCloud
-  InternetRoute:
-    Type: AWS::EC2::Route
-    DependsOn: VPCGatewayAttachment
-    Properties:
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref InternetGateway
-      RouteTableId: !Ref RouteTable
-  SubnetARouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref RouteTable
-      SubnetId: !Ref PublicSubnet1
   EC2Instance1:
     Type: AWS::EC2::Instance
     DependsOn:
       - InstanceSecurityGroup
-      - PublicSubnet1
     Properties:
       InstanceType:
         Ref: InstanceType
+      SecurityGroups:
+      - Ref: InstanceSecurityGroup
       KeyName:
         Ref: KeyName
       ImageId:
@@ -179,13 +155,6 @@ Resources:
           - AWSInstanceType2Arch
           - Ref: InstanceType
           - Arch
-      NetworkInterfaces:
-      - PrivateIpAddress: '172.31.23.4'
-        SubnetId: !Ref PublicSubnet1
-        DeviceIndex: '0'
-        GroupSet:
-        - !Ref InstanceSecurityGroup
-        AssociatePublicIpAddress: true
       UserData: !Base64
         'Fn::Join':
           - ''
@@ -202,10 +171,11 @@ Resources:
     Type: AWS::EC2::Instance
     DependsOn:
       - InstanceSecurityGroup
-      - PublicSubnet1
     Properties:
       InstanceType:
         Ref: InstanceType
+      SecurityGroups:
+      - Ref: InstanceSecurityGroup
       KeyName:
         Ref: KeyName
       ImageId:
@@ -216,13 +186,6 @@ Resources:
           - AWSInstanceType2Arch
           - Ref: InstanceType
           - Arch
-      NetworkInterfaces:
-      - PrivateIpAddress: '172.31.23.5'
-        SubnetId: !Ref PublicSubnet1
-        DeviceIndex: '0'
-        GroupSet:
-        - !Ref InstanceSecurityGroup
-        AssociatePublicIpAddress: true
       UserData: !Base64
         'Fn::Join':
           - ''

@@ -26,10 +26,11 @@ stuff = """  EC2Instance<<number+2>>:
     Type: AWS::EC2::Instance
     DependsOn:
       - InstanceSecurityGroup
-      - PublicSubnet1
     Properties:
       InstanceType:
         Ref: InstanceType
+      SecurityGroups:
+      - Ref: InstanceSecurityGroup
       KeyName:
         Ref: KeyName
       ImageId:
@@ -40,13 +41,6 @@ stuff = """  EC2Instance<<number+2>>:
           - AWSInstanceType2Arch
           - Ref: InstanceType
           - Arch
-      NetworkInterfaces:
-      - PrivateIpAddress: '172.31.23.<<number+5>>'
-        SubnetId: !Ref PublicSubnet1
-        DeviceIndex: '0'
-        GroupSet:
-        - !Ref InstanceSecurityGroup
-        AssociatePublicIpAddress: true
       UserData: !Base64
         'Fn::Join':
           - ''
