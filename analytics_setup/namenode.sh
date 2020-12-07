@@ -71,6 +71,7 @@ export YARN_RESOURCEMANAGER_USER=hadoop
 export YARN_NODEMANAGER_USER=hadoop" >> hadoop-3.3.0/etc/hadoop/hadoop-env.sh
 
 MASTER="hadoop-node-1"
+#account for up to 10
 WORKERS="hadoop-node-2 hadoop-node-3 hadoop-node-4 hadoop-node-5 hadoop-node-6 hadoop-node-7 hadoop-node-8 hadoop-node-9 hadoop-node-10"  
 
 echo -e "<?xml version=\"1.0\"?>
@@ -162,9 +163,12 @@ rm hadoop-3.3.0/etc/hadoop/workers
 
 echo checkpoint5
 
-for ip in ${WORKERS}; do echo -e "${ip}" >> hadoop-3.3.0/etc/hadoop/workers ; done
+sudo chown -R hadoop:hadoop /home/ubuntu/workers
+sudo mv /home/ubuntu/workers hadoop-3.3.0/etc/hadoop/workers
 
-for ip in ${WORKERS}; do echo -e "${ip}"  ; done
+#for ip in ${WORKERS}; do echo -e "${ip}" >> hadoop-3.3.0/etc/hadoop/workers ; done
+
+#for ip in ${WORKERS}; do echo -e "${ip}"  ; done
 
 #Distributing the configured library
 tar czvf hadoop-3.3.0.tgz hadoop-3.3.0
