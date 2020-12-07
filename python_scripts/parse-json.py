@@ -107,6 +107,20 @@ for ip in outputs.values():
         + ":/home/ubuntu/hosts"
     )
 
+for i in range(2, len(ordered_outputs) + 1):
+    os.system("echo -e hadoop-node-" + str(i) + " >> ~/workers")
+
+for ip in outputs.values():
+    os.system(
+        "scp -i ~/.ssh/"
+        + ssh_key
+        + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+        + " ~/workers"
+        + " ubuntu@"
+        + ip
+        + ":/home/ubuntu/workers"
+    )
+
 
 # run scripts
 for ip in outputs.values():
