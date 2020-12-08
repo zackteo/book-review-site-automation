@@ -96,11 +96,11 @@ echo -e "<?xml version=\"1.0\"?>
 </property>
 <property>
 <name>dfs.namenode.name.dir</name>
-<value>file:/mnt/hadoop/namenode</value>
+<value>/mnt/hadoop/namenode</value>
 </property>
 <property>
 <name>dfs.datanode.data.dir</name>
-<value>file:/mnt/hadoop/datanode</value>
+<value>/mnt/hadoop/datanode</value>
 </property>
 </configuration>
 " > hadoop-3.3.0/etc/hadoop/hdfs-site.xml
