@@ -17,7 +17,7 @@ fil.close()
 
 # get reviews from hdfs and load into dataframe
 reviews = (
-    spark.read.format("com.databricks.spark.csv")
+    spark.read.format("csv")
     .options(header="true", inferschema="true")
     .load(location + "kindle_reviews.csv")
 )

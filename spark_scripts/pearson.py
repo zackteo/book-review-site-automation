@@ -16,7 +16,7 @@ fil.close()
 
 # get reviews from hdfs and load into dataframe
 reviews = (
-    spark.read.format("com.databricks.spark.csv")
+    spark.read.format("csv")
     .options(header="true", inferschema="true")
     .load(location + "kindle_reviews.csv")
 )
@@ -47,9 +47,9 @@ reviews = (
 
 # convert our metadata.csv into a dataframe
 meta = (
-    spark.read.format("com.databricks.spark.csv")
+    spark.read.format("json")
     .options(header="true", inferschema="true")
-    .load(location + "meta_Kindle_Store.csv")
+    .load(location + "meta_Kindle_Store.json")
 )
 meta.show(5)
 meta = (
