@@ -242,44 +242,54 @@ echo checkpoint9.5
 
 sleep 1m
 
-# Start Hadoop
-# MAY HAVE TO MANUALLY SSH SWITCH TO HADOOP USER AND RUN FROM HERE 
-#
-/opt/hadoop-3.3.0/sbin/start-dfs.sh && /opt/hadoop-3.3.0/sbin/start-yarn.sh
 
-echo checkpoint9.75
 
-sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2/logs
-# Start Spark Cluster
-/opt/spark-3.0.1-bin-hadoop3.2/sbin/start-all.sh
-
-echo checkpoint10
-
+##before manual
 wget https://istd50043.s3-ap-southeast-1.amazonaws.com/kindle-reviews.zip
 sudo apt-get install -y unzip
 unzip kindle-reviews.zip
 rm -rf kindle_reviews.json
-/opt/hadoop-3.3.0/bin/hdfs dfs -put kindle_reviews.csv /
-
 
 wget https://istd50043.s3-ap-southeast-1.amazonaws.com/meta_kindle_store.zip
 unzip meta_kindle_store.zip
-/opt/hadoop-3.3.0/bin/hdfs dfs -put meta_Kindle_Store.json /
 
 
-sudo apt-get install -y python3-venv
-mkdir spark_scripts
-sudo chown -R ubuntu:ubuntu /home/ubuntu/spark_scripts
-cd spark_scripts
-python3 -m venv .venv
-sudo chown -R ubuntu:ubuntu /home/ubuntu/spark_scripts/.venv
-source .venv/bin/activate
-python3 -m pip install --upgrade pip
-pip3 install numpy pyspark
-deactivate
-
-cd /home/ubuntu
-mv namenode_ip.txt pearson.py tfidf.py /home/ubuntu/spark_scripts
+# Start Hadoop
+# MAY HAVE TO MANUALLY SSH SWITCH TO HADOOP USER AND RUN FROM HERE 
+#
+#/opt/hadoop-3.3.0/sbin/start-dfs.sh && /opt/hadoop-3.3.0/sbin/start-yarn.sh
+#
+#echo checkpoint9.75
+#
+#sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2/logs
+## Start Spark Cluster
+#/opt/spark-3.0.1-bin-hadoop3.2/sbin/start-all.sh
+#
+#echo checkpoint10
+#
+#
+#
+#sudo chown -R hadoop:hadoop kindle_reviews.csv 
+#
+#/opt/hadoop-3.3.0/bin/hdfs dfs -put kindle_reviews.csv /
+#
+#
+#sudo chown -R hadoop:hadoop meta_Kindle_Store.json
+#/opt/hadoop-3.3.0/bin/hdfs dfs -put meta_Kindle_Store.json /
+#
+#sudo apt-get install -y python3-venv
+#mkdir spark_scripts
+#sudo chown -R ubuntu:ubuntu /home/ubuntu/spark_scripts
+#cd spark_scripts
+#python3 -m venv .venv
+#sudo chown -R ubuntu:ubuntu /home/ubuntu/spark_scripts/.venv
+#source .venv/bin/activate
+#python3 -m pip install --upgrade pip
+#pip3 install numpy pyspark
+#deactivate
+#
+#cd /home/ubuntu
+#mv namenode_ip.txt pearson.py tfidf.py /home/ubuntu/spark_scripts
 
 
 #Setup Geni (Clojure's spark interface)

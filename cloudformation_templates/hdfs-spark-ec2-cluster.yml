@@ -120,6 +120,10 @@ Resources:
         FromPort: '50070'
         ToPort: '50070'
         CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '8088'
+        ToPort: '8088'
+        CidrIp: 0.0.0.0/0
 #      SecurityGroupEgress:
 #      - IpProtocol: -1
 #        CidrIp: 0.0.0.0/0
