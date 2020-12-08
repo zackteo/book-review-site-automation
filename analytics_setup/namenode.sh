@@ -220,6 +220,9 @@ export SPARK_DRIVER_MEMORY=1G
 export PYSPARK_PYTHON=python3
 " >> spark-3.0.1-bin-hadoop3.2/conf/spark-env.sh
 
+touch spark-3.0.1-bin-hadoop3.2/conf/slaves
+sudo cp /opt/hadoop-3.3.0/etc/hadoop/workers spark-3.0.1-bin-hadoop3.2/conf/slaves
+
 tar czvf spark-3.0.1-bin-hadoop3.2.tgz spark-3.0.1-bin-hadoop3.2/
 
 for i in ${WORKERS}
