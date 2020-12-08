@@ -62,10 +62,10 @@ os.system(
 
 host_file = """
 # /etc/hosts
-172.31.23.4 hadoop-node-1
-172.31.23.5 hadoop-node-2
-172.31.23.6 hadoop-node-3
-172.31.23.7 hadoop-node-4
+172.20.129.147 com.avg.fury
+172.20.170.15 com.avg.ironman
+172.20.170.16 com.avg.capt
+172.20.170.17 com.avg.hulk
 # The following lines are desirable for IPv6 capable hosts
 ::1
 ip6-localhost ip6-loopback
@@ -84,7 +84,7 @@ print(ordered_outputs)
 # create hosts file
 os.system("echo '# ~/hosts >> ~/hosts'")
 for i, ip in enumerate(ordered_outputs.values()):
-    os.system("echo " + str(ip) + " hadoop-node-" + str(i + 1) + " >> ~/hosts")
+    os.system("echo " + str(ip) + " com.avg.hadoop" + str(i + 1) + " >> ~/hosts")
 os.system(
     "echo '# The following lines are desirable for IPv6 capable hosts >> ~/hosts'"
 )
@@ -108,7 +108,7 @@ for ip in outputs.values():
     )
 
 for i in range(2, len(ordered_outputs) + 1):
-    os.system("echo hadoop-node-" + str(i) + " >> ~/workers")
+    os.system("echo com.avg.hadoop" + str(i) + " >> ~/workers")
 
 for ip in outputs.values():
     os.system(

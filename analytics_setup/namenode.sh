@@ -70,9 +70,9 @@ export HDFS_SECONDARYNAMENODE_USER=hadoop
 export YARN_RESOURCEMANAGER_USER=hadoop
 export YARN_NODEMANAGER_USER=hadoop" >> hadoop-3.3.0/etc/hadoop/hadoop-env.sh
 
-MASTER="hadoop-node-1"
+MASTER="com.avg.hadoop1"
 #account for up to 10
-WORKERS="hadoop-node-2 hadoop-node-3 hadoop-node-4 hadoop-node-5 hadoop-node-6 hadoop-node-7 hadoop-node-8 hadoop-node-9 hadoop-node-10"  
+WORKERS="com.avg.hadoop2 com.avg.hadoop3 com.avg.hadoop4 com.avg.hadoop5 com.avg.hadoop6 com.avg.hadoop7 com.avg.hadoop8 com.avg.hadoop9 com.avg.hadoop10 com.avg.hadoop11 com.avg.hadoop12" 
 
 echo -e "<?xml version=\"1.0\"?>
 <?xml-stylesheet type=\"text/xsl\" href=\"configuration.xsl\"?>
