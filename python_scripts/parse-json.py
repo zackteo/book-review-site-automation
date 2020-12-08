@@ -67,8 +67,7 @@ host_file = """
 172.20.170.16 com.avg.capt
 172.20.170.17 com.avg.hulk
 # The following lines are desirable for IPv6 capable hosts
-::1
-ip6-localhost ip6-loopback
+::1 ip6-localhost ip6-loopback
 fe00::0 ip6-localnet
 ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes
@@ -88,8 +87,7 @@ for i, ip in enumerate(ordered_outputs.values()):
 os.system(
     "echo '# The following lines are desirable for IPv6 capable hosts >> ~/hosts'"
 )
-os.system("echo ::1 >> ~/hosts")
-os.system("echo ip6-localhost ip6-loopback >> ~/hosts")
+os.system("echo ::1 ip6-localhost ip6-loopback >> ~/hosts")
 os.system("echo fe00::0 ip6-localnet >> ~/hosts")
 os.system("echo ff00::0 ip6-mcastprefix >> ~/hosts")
 os.system("echo ff02::1 ip6-allnodes >> ~/hosts")
