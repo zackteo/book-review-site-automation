@@ -7,7 +7,10 @@ Start up an EC2 instance with basic OS image - `ami-0f82752aa17ff8f5d`
 ### Requirements
 Please download necessary python libraries needed - they are in requirements.txt.   
 (We are using a mix of python and bash scripts to automate the system)
-```
+```bash
+git clone https://github.com/zackteo/book-review-site-automation.git
+cd book-review-site-automation
+sudo apt-get update && sudo apt-get install -y python-pip
 pip install -r requirements.txt
 ```
 ### Production System
