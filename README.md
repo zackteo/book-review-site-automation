@@ -42,10 +42,6 @@ python production_setup/teardown_production.py
 _______________________________
 ### Analytics System
 #### Set Up
-...
-
-#### Tear Down
-...
 ```bash
 git clone https://github.com/zackteo/book-review-site-automation.git
 cd book-review-site-automation
@@ -56,3 +52,10 @@ chmod +x start-analytics.sh
 May have to manually ssh, change user to hadoop and run scripts at the end of `namenode.sh` from line 242
 
 Because for user data script doesn't seem to allow user change (only root)
+
+#### Tear Down
+...
+```bash
+aws cloudformation delete-stack --stack-name analytics-system 
+```
+

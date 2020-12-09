@@ -250,7 +250,9 @@ mongo_url = "{}".format(mongo_ip)  # insert mongo url here
 
 # ---------------------------------------------------------------------------------------
 # Write AWS IDs to file for tear down later on
-teardown_environment_file = open("teardown_environment_production.py", "w")
+teardown_environment_file = open(
+    "production_setup/teardown_environment_production.py", "w"
+)
 teardown_environment_file.write("ec2_ids={}\n".format(all_node_ids))
 teardown_environment_file.write("security_groups={}\n".format(all_node_security_groups))
 teardown_environment_file.write("key_pair='{}'".format(key_pair))
