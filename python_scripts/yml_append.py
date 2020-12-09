@@ -85,12 +85,12 @@ dns_output = """#  Instance<<number>>PublicDNS:
 #      Fn::GetAtt:
 #      - EC2Instance<<number>>
 #      - PublicDnsName
-  Instance<<number>>PublicIP:
-    Description: Public IP address of the newly created EC2 instance
+  Instance<<number>>PrivateIP:
+    Description: Private IP address of the newly created EC2 instance
     Value:
       Fn::GetAtt:
       - EC2Instance<<number>>
-      - PublicIp
+      - PrivateIp
 """
 
 # output DNS for each instance in the cluster

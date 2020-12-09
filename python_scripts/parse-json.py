@@ -22,7 +22,7 @@ outputs = dict()
 for i in data["Stacks"][0]["Outputs"]:
     outputs[i["OutputKey"]] = i["OutputValue"]
 
-dns = outputs["Instance1PublicIP"]
+dns = outputs["Instance1PrivateIP"]
 
 # send aws-key to namenode
 os.system(
