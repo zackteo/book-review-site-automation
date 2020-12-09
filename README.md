@@ -23,7 +23,7 @@ python production_setup/production.py
 After running the above python script executes, it will automatically request you to key in the inputs for AWS credentials: 
 - aws access key id
 - aws secret access key
-- aws session token 
+- aws session token
 
 You can retrieve these values in your AWS console at main page. 
 At the end of the set up, the url of the website will be given in console.
@@ -34,8 +34,9 @@ The node IDs of the aws instances will be saved in /production_setup/teardown_en
 
 #### Tear Down
 Similarly, the teardown only requires running of a python file. 
-The required data(node ids of aws instances) are already saved locally so you don't have to key in anything.
+The required data(node ids of aws instances) are already saved locally so you don't have to key in anything. 
 ```
+source .venv/bin/activate
 python production_setup/teardown_production.py
 ```
 _______________________________
