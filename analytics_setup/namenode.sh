@@ -253,6 +253,12 @@ rm -rf kindle_reviews.json
 wget https://istd50043.s3-ap-southeast-1.amazonaws.com/meta_kindle_store.zip
 unzip meta_kindle_store.zip
 
+# Clear Storage
+rm -rf kindle-reviews.zip
+rm -rf meta_kindle_store.zip
+rm -rf hadoop-3.3.0.tar.gz
+rm -rf hadoop-3.3.0.tgz
+rm -rf spark-3.0.1-bin-hadoop3.2.tgz 
 
 # Start Hadoop
 # MAY HAVE TO MANUALLY SSH SWITCH TO HADOOP USER AND RUN FROM HERE 
@@ -261,7 +267,7 @@ unzip meta_kindle_store.zip
 #
 #echo checkpoint9.75
 #
-#sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2/logs
+###sudo chown -R hadoop:hadoop /opt/spark-3.0.1-bin-hadoop3.2/logs
 ## Start Spark Cluster
 #/opt/spark-3.0.1-bin-hadoop3.2/sbin/start-all.sh
 #
@@ -269,16 +275,17 @@ unzip meta_kindle_store.zip
 #
 #
 #
-#sudo chown -R hadoop:hadoop kindle_reviews.csv 
-#
+###sudo chown -R hadoop:hadoop kindle_reviews.csv 
 #/opt/hadoop-3.3.0/bin/hdfs dfs -put kindle_reviews.csv /
 #
 #
-#sudo chown -R hadoop:hadoop meta_Kindle_Store.json
+###sudo chown -R hadoop:hadoop meta_Kindle_Store.json
 #/opt/hadoop-3.3.0/bin/hdfs dfs -put meta_Kindle_Store.json /
 #
+#sudo su ubuntu
 #sudo apt-get install -y python3-venv
 #mkdir spark_scripts
+#mv namenode_ip.txt pearson.py tfidf.py /home/ubuntu/spark_scripts
 #sudo chown -R ubuntu:ubuntu /home/ubuntu/spark_scripts
 #cd spark_scripts
 #python3 -m venv .venv
@@ -287,9 +294,9 @@ unzip meta_kindle_store.zip
 #python3 -m pip install --upgrade pip
 #pip3 install numpy pyspark
 #deactivate
-#
-#cd /home/ubuntu
-#mv namenode_ip.txt pearson.py tfidf.py /home/ubuntu/spark_scripts
+
+
+
 
 
 #Setup Geni (Clojure's spark interface)

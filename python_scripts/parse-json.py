@@ -82,6 +82,7 @@ print(ordered_outputs)
 
 # create hosts file
 os.system("echo '# ~/hosts >> ~/hosts'")
+os.system("echo 127.0.0.1 localhost >> ~/hosts")
 for i, ip in enumerate(ordered_outputs.values()):
     os.system("echo " + str(ip) + " com.avg.hadoop" + str(i + 1) + " >> ~/hosts")
 os.system(
