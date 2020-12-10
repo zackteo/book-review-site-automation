@@ -152,7 +152,7 @@ os.system(
     + ":/home/ubuntu/tfidf.py"
 )
 
-os.system("echo hdfs://" + str(dns) + ":9000/ > ~/namenode_ip.txt")
+os.system("echo hdfs://" + "com.avg.hadoop1" + ":9000/ > ~/namenode_ip.txt")
 
 os.system(
     "scp -i ~/.ssh/"
